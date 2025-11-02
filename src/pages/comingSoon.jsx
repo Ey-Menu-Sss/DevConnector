@@ -12,8 +12,8 @@ const ComingSoon = () => {
           <div className="icon_wrapper">
             <i className="bx bx-code-alt"></i>
           </div>
-          <h1>Running in Debug Mode</h1>
-          <p className="subtitle">Production Coming Soon</p>
+          <h1>Still cooking in the dev kitchen</h1>
+          <p className="subtitle">Production Coming Soon!</p>
           <p className="description">
             We're working hard to bring you an amazing experience. This feature is currently under development and will be available soon!
           </p>
