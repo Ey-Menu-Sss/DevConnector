@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import RegisterHeader from "../components/registerHeader";
-import styles from "../styles/registerPage.module.scss";
+import "../styles/pages/_login.scss";
 import { useDispatch } from "react-redux";
 
 const login = () => {
@@ -28,19 +28,18 @@ const login = () => {
   async function submit(e) {
     e.preventDefault();
     try {
-      let data = await axios.post("/auth", {
+      const { data } = await axios.post("login/", {
         email: values.email,
         password: values.password,
       });
-      console.log(data);
-      if(data.data.token){
+
+      if(data.token){
         toast("login success", {type: "success"})
-        localStorage.setItem("token", data.data.token)
-        // dispatch(UserDatas(data.data.))
+        localStorage.setItem("token", data.token)
+        axios.defaults.headers.common["x-auth-token"] = `${data.token}`
         navigate("/dashboard")
       }
     } catch (err) {
-      console.log(err);
       toast("Invalid Credentials", {type: "error"})
     }
   }
@@ -49,16 +48,16 @@ const login = () => {
     <div>
       <RegisterHeader />
 
-      <div className={styles.container}>
-        <div className={styles.texts}>
+      <div className="login_container">
+        <div className="texts">
           <h1>Sign In</h1>
           <br />
-          <div className={styles.info}>
+          <div className="info">
             <i className="bx bxs-user"></i>
             <h2>Sign Into Your Account</h2>
           </div>
         </div>
-        <form className={styles.form} onSubmit={submit}>
+        <form className="form" onSubmit={submit}>
           <input
             type="text"
             name="email"
@@ -80,7 +79,7 @@ const login = () => {
         <br />
         <h4>
           Don't have an account?
-          <Link to="/register" className={styles.link}>
+          <Link to="/register" className="link">
             Sign Up
           </Link>
         </h4>

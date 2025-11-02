@@ -1,0 +1,136 @@
+/* ===========================
+   BUTTON COMPONENTS (Shared)
+=========================== */
+
+// Back Button
+.btn_back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: var(--color-muted);
+  color: var(--color-bg, #000);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition: transform 0.14s ease, box-shadow 0.16s ease, background 0.12s ease;
+  box-shadow: 0 6px 18px rgba(16, 24, 40, 0.06);
+  text-decoration: none;
+
+  svg, i { 
+    font-size: 18px; 
+  }
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.06);
+    text-decoration: none;
+  }
+}
+
+// Primary Button
+.btn_primary {
+  border: none;
+  background: var(--gradient-primary);
+  color: var(--color-white);
+  padding: 14px 32px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: var(--radius-pill);
+  transition: all 0.2s ease;
+  box-shadow: var(--btn-shadow);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--btn-shadow-hover);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// Secondary Button
+.btn_secondary {
+  background-color: var(--color-muted);
+  color: var(--color-bg, #000);
+  padding: 14px 32px;
+  font-size: 18px;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: var(--radius-pill);
+  transition: all 0.2s ease;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  display: inline-flex;
+  align-items: center;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(16, 24, 40, 0.1);
+  }
+}
+
+// Delete/Danger Button
+.btn_delete {
+  background-color: #ef4444;
+  color: var(--color-white);
+  border: none;
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.25);
+
+  &:hover {
+    background-color: #dc2626;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(239, 68, 68, 0.35);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// Remove/Close Button (X button)
+.btn_remove {
+  background-color: #ef4444;
+  color: var(--color-white);
+  padding: 8px 10px;
+  font-size: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.25);
+  transition: all 0.15s ease;
+  border: none;
+  min-width: 36px;
+  min-height: 36px;
+
+  i {
+    font-size: 20px;
+  }
+
+  &:hover {
+    background-color: #dc2626;
+    box-shadow: 0 6px 14px rgba(239, 68, 68, 0.35);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+
+
+

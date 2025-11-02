@@ -1,0 +1,325 @@
+// Dashboard Page Styles
+
+.dashboardContainer {
+  width: 1100px;
+  margin: 30px auto;
+  padding: 0 20px;
+
+  h1 {
+    font-size: 48px;
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+
+  h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 32px;
+    color: var(--color-text-muted);
+    margin: 1.5rem 0;
+    font-weight: 600;
+
+    i {
+      color: var(--color-primary);
+      font-size: 32px;
+    }
+  }
+
+  .btnPrimary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 12px 24px;
+    font-size: 18px;
+    font-weight: 500;
+    border-radius: var(--radius-pill);
+    background: var(--gradient-primary);
+    color: var(--color-white);
+    border: none;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: var(--btn-shadow);
+    margin-top: 1rem;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--btn-shadow-hover);
+      text-decoration: none;
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  .addOrEditSection {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+
+    .link {
+      text-decoration: none;
+      color: inherit;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .editProfile,
+    .addExperience,
+    .addEducation {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 500;
+      gap: 10px;
+      background: var(--card-bg);
+      padding: 16px 24px;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      box-shadow: var(--card-shadow);
+      transition: all 0.2s ease;
+      cursor: pointer;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(2, 6, 23, 0.1);
+        border-color: var(--color-primary);
+      }
+
+      i {
+        color: var(--color-primary);
+        font-size: 24px;
+      }
+
+      p {
+        margin: 0;
+      }
+    }
+  }
+
+  .expCredentials {
+    margin-top: 2.5rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: var(--card-shadow);
+
+    h2 {
+      color: var(--color-primary);
+      font-size: 28px;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 2px solid var(--color-muted-2);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+
+      thead {
+        tr {
+          background-color: var(--color-bg-plate);
+        }
+      }
+
+      th {
+        background-color: var(--color-bg-plate);
+        font-size: 18px;
+        font-weight: 600;
+        padding: 16px 20px;
+        text-align: left;
+        color: var(--color-text-muted);
+        border-bottom: 2px solid var(--color-muted-2);
+      }
+
+      tbody {
+        tr {
+          transition: background 0.15s ease;
+
+          &:hover {
+            background-color: var(--color-bg-plate);
+          }
+        }
+      }
+
+      td {
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--color-muted-2);
+        color: var(--color-text-muted);
+        font-size: 16px;
+      }
+
+      .btnDelete {
+        background-color: #ef4444;
+        color: var(--color-white);
+        border: none;
+        padding: 8px 16px;
+        font-size: 16px;
+        font-weight: 500;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 0.15s ease;
+        box-shadow: 0 4px 10px rgba(239, 68, 68, 0.25);
+
+        &:hover {
+          background-color: #dc2626;
+          transform: translateY(-1px);
+          box-shadow: 0 6px 14px rgba(239, 68, 68, 0.35);
+        }
+
+        &:active {
+          transform: translateY(0);
+        }
+      }
+    }
+  }
+
+  .deleteAccount {
+    margin-top: 2.5rem;
+    background-color: #ef4444;
+    color: var(--color-white);
+    padding: 14px 28px;
+    font-size: 18px;
+    font-weight: 500;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+
+    &:hover {
+      background-color: #dc2626;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+}
+
+/* ===========================
+   RESPONSIVE DASHBOARD PAGE
+=========================== */
+
+@media (max-width: 768px) {
+  .dashboardContainer {
+    width: 100%;
+    padding: 0 20px;
+    margin: 20px auto;
+
+    h1 {
+      font-size: 32px;
+    }
+
+    h2 {
+      font-size: 24px;
+
+      i {
+        font-size: 24px;
+      }
+    }
+
+    .btnPrimary {
+      width: 100%;
+      font-size: 16px;
+      padding: 12px 20px;
+    }
+
+    .addOrEditSection {
+      flex-direction: column;
+      gap: 1rem;
+
+      .link {
+        width: 100%;
+
+        .editProfile,
+        .addExperience,
+        .addEducation {
+          width: 100%;
+          font-size: 16px;
+          padding: 14px 20px;
+
+          i {
+            font-size: 20px;
+          }
+        }
+      }
+    }
+
+    .expCredentials {
+      padding: 16px;
+      overflow-x: auto;
+
+      h2 {
+        font-size: 22px;
+      }
+
+      table {
+        font-size: 14px;
+
+        th {
+          font-size: 14px;
+          padding: 12px 8px;
+        }
+
+        td {
+          padding: 12px 8px;
+          font-size: 14px;
+
+          .btnDelete {
+            font-size: 14px;
+            padding: 6px 12px;
+          }
+        }
+      }
+    }
+
+    .deleteAccount {
+      width: 100%;
+      font-size: 16px;
+      padding: 12px 20px;
+    }
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .dashboardContainer {
+    width: 90%;
+    max-width: 1000px;
+
+    h1 {
+      font-size: 40px;
+    }
+
+    h2 {
+      font-size: 28px;
+
+      i {
+        font-size: 28px;
+      }
+    }
+
+    .addOrEditSection {
+      gap: 1rem;
+    }
+
+    .expCredentials {
+      table {
+        th {
+          font-size: 16px;
+        }
+
+        td {
+          font-size: 15px;
+        }
+      }
+    }
+  }
+}

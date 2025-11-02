@@ -1,151 +1,140 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import styles from "../styles/dashboardPage.module.scss";
 import Header from "../components/dashboardHeader";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { Education, Experience, UserAllInfo } from "../store/slices/user";
 import { toast } from "react-toastify";
+import "../styles/dashboard.scss";
 
-const dashboard = () => {
+const Dashboard = () => {
   const [name, setName] = useState("");
   const [profile, setProfile] = useState({});
+  const [use, setUse] = useState(false);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [use, setUse] = useState(false);
+
   const ud = useSelector((s) => s.userDatas.userdatas);
   const edu = useSelector((s) => s.userDatas.educations);
-  console.log(profile);
-  // let a = useSelector((i) => console.log(i))
-  // console.log(ud.length);
-
-  // console.log("locals", JSON.parse(localStorage.getItem("experiences")));
 
   if (!localStorage.getItem("token")) {
     useEffect(() => navigate("/login"), []);
   }
 
+  const fetchProfile = async () => {
+    try {
+      axios.defaults.headers.common["x-auth-token"] =
+        localStorage.getItem("token");
+      const res = await axios.get("/profile/me");
+      res.data && localStorage.setItem("userinfo", JSON.stringify(res.data));
+      
+      setName(res.data?.user?.name);
+      setProfile(res.data);
+      dispatch(UserAllInfo(res.data));
+      setUse(true);
+    } catch (err) {
+      setUse(true);
+    }
+  };
+
   useEffect(() => {
-    (async function getprofileme() {
-      axios.defaults.headers.common["x-auth-token"] = `${localStorage.getItem(
-        "token"
-      )}`;
-      let res = await axios
-        .get("/profile/me")
-        .then((data) => {
-          console.log(data);
-          setName(data.data?.user?.name);
-          setProfile(data.data);
-          dispatch(UserAllInfo(data.data));
-          setUse(true);
-        })
-        .catch((err) => {
-          setUse(true);
-          console.log(err);
-        });
-    })();
+    fetchProfile();
   }, []);
 
-  function deleteExp(id) {
+  const deleteExp = async (id) => {
     try {
-      let res = axios.delete(`/profile/experience/${id}`).then((data) => {
-        console.log(data.data);
-        dispatch(Experience(data.data.experience));
-        toast("delted successfully", { type: "success" });
-      });
+      const res = await axios.delete(`/profile/experience/${id}`);
+      dispatch(Experience(res.data.experience));
+      setProfile(prev => ({ ...prev, experience: res.data.experience }));
+      toast("Experience deleted successfully", { type: "success" });
     } catch (err) {
-      console.log(err);
+      toast("Failed to delete experience", { type: "error" });
     }
-  }
-  function deleteEdu(id) {
-    try {
-      let res = axios.delete(`/profile/education/${id}`).then((data) => {
-        dispatch(Education(data.data.education));
-        toast("delted successfully", { type: "success" });
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  }
+  };
 
-  function deleteAccaunt() {
-    let ask = confirm("Are you sure? This can not be undone!");
-    if (ask) {
-      (async function delAcc() {
-        let data = await axios.delete("/profile");
-        toast(data.data.msg, {type: 'success'})
-        localStorage.clear()
-        navigate("/")
-      })();
+  const deleteEdu = async (id) => {
+    try {
+      const res = await axios.delete(`/profile/education/${id}`);
+      dispatch(Education(res.data.education));
+      setProfile(prev => ({ ...prev, education: res.data.education }));
+      toast("Education deleted successfully", { type: "success" });
+    } catch (err) {
+      toast("Failed to delete education", { type: "error" });
     }
-  }
+  };
+
+  const deleteAccount = async () => {
+    console.log('Delete account function called');
+    const data = JSON.parse(localStorage.getItem("userinfo"));
+    const id = data?.user?._id;
+    
+    
+    if (confirm("Are you sure? This cannot be undone!")) {
+      const res = await axios.delete(`/profile/${id}`);
+      console.log(res.data);
+      
+      toast(res.data.msg, { type: "success" });
+      localStorage.clear();
+      navigate("/");
+    }
+  };
+  
 
   return (
     <div>
       <Header />
-      {/* tipa if */}
 
       {Object.keys(profile).length === 0 ? (
-        <div className={styles.d_container}>
+        <div className="dashboardContainer">
           <h1>Dashboard</h1>
-          <br />
           {!use ? (
-            <h1>Just a second...</h1>
+            <h1>Loading...</h1>
           ) : (
             <div>
               <h2>
-                <i className="bx bxs-user"></i>
-                Hello and Welcome new User!
+                <i className="bx bxs-user"></i>Welcome new User!
               </h2>
-              <br />
-              <p>You have not yet setup a profile, please add some info</p>
-              <br />
-              <br />
-              <Link to="/create-profile" className={styles.button}>
+              <p>You have not yet setup a profile. Please add some info.</p>
+              <Link to="/create-profile" className="btnPrimary">
                 Create Profile
               </Link>
             </div>
           )}
         </div>
       ) : (
-        // tipa else
-        <div className={styles.d_container}>
+        <div className="dashboardContainer">
           <h1>Dashboard</h1>
-          <br />
           <h2>
-            <i className="bx bxs-user"></i>
-            Welcome {name}!
+            <i className="bx bxs-user"></i> Hello, {name}!
           </h2>
-          <br />
-          <div className={styles.addoredits}>
-            <Link to="/edit-profile" className={styles.link}>
-              <div className={styles.editProfile}>
+
+          <div className="addOrEditSection">
+            <Link to="/edit-profile" className="link">
+              <div className="editProfile">
                 <i className="bx bxs-user-circle"></i>
                 <p>Edit Profile</p>
               </div>
             </Link>
-            <Link to="/add-experience" className={styles.link}>
-              <div className={styles.addExperience}>
+            <Link to="/add-experience" className="link">
+              <div className="addExperience">
                 <i className="bx bx-clipboard"></i>
                 <p>Add Experience</p>
               </div>
             </Link>
-            <Link to="/add-education" className={styles.link}>
-              <div className={styles.addEducation}>
+            <Link to="/add-education" className="link">
+              <div className="addEducation">
                 <i className="bx bxs-graduation"></i>
                 <p>Add Education</p>
               </div>
             </Link>
           </div>
-          <br />
-          <br />
 
-          <div className={styles.expCredentials}>
+          <div className="expCredentials">
             <h2>Experience Credentials</h2>
-            <br />
             <table>
               <thead>
-                <tr className={styles.thead}>
+                <tr>
                   <th>Company</th>
                   <th>Title</th>
                   <th>Years</th>
@@ -153,45 +142,38 @@ const dashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {ud.length === 0
-                  ? profile?.experience?.map((e, index) => (
-                      <tr key={index} className={styles.tbody}>
-                        <td>{e.company}</td>
-                        <td>{e.title}</td>
-                        <td>{e.from}</td>
-                        <td>
-                          <button onClick={() => deleteExp(e._id)}>
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))
-                  : ud[0]?.map((u, index) => (
-                      <tr key={index} className={styles.tbody}>
-                        <td>{u.company}</td>
-                        <td>{u.title}</td>
-                        <td>{u.from}</td>
-                        <td>
-                          <button onClick={() => deleteExp(u._id)}>
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
+                {(profile?.experience && profile.experience.length > 0) ? (
+                  profile.experience.map((item) => (
+                    <tr key={item._id}>
+                      <td>{item.company}</td>
+                      <td>{item.title}</td>
+                      <td>{item.from}</td>
+                      <td>
+                        <button
+                          className="btnDelete"
+                          onClick={() => deleteExp(item._id)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="4" style={{ textAlign: "center", color: "var(--color-text-muted)" }}>
+                      No experiences yet
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
-          <br />
-          <br />
 
-          {/* tepa Experiences    pas Educations */}
-
-          <div className={styles.expCredentials}>
+          <div className="expCredentials">
             <h2>Education Credentials</h2>
-            <br />
             <table>
               <thead>
-                <tr className={styles.thead}>
+                <tr>
                   <th>School</th>
                   <th>Degree</th>
                   <th>Years</th>
@@ -199,38 +181,34 @@ const dashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {edu.length === 0
-                  ? profile?.education?.map((e, index) => (
-                      <tr key={index} className={styles.tbody}>
-                        <td>{e.school}</td>
-                        <td>{e.degree}</td>
-                        <td>{e.from}</td>
-                        <td>
-                          <button onClick={() => deleteEdu(e._id)}>
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))
-                  : edu[0]?.map((u, index) => (
-                      <tr key={index} className={styles.tbody}>
-                        <td>{u.school}</td>
-                        <td>{u.degree}</td>
-                        <td>{u.from}</td>
-                        <td>
-                          <button onClick={() => deleteEdu(u._id)}>
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
+                {(profile?.education && profile.education.length > 0) ? (
+                  profile.education.map((item) => (
+                    <tr key={item._id}>
+                      <td>{item.school}</td>
+                      <td>{item.degree}</td>
+                      <td>{item.from}</td>
+                      <td>
+                        <button
+                          className="btnDelete"
+                          onClick={() => deleteEdu(item._id)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="4" style={{ textAlign: "center", color: "var(--color-text-muted)" }}>
+                      No educations yet
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
-          <br />
-          <br />
 
-          <button className={styles.delete} onClick={deleteAccaunt}>
+          <button className="deleteAccount" onClick={deleteAccount}>
             Delete My Account
           </button>
         </div>
@@ -239,4 +217,4 @@ const dashboard = () => {
   );
 };
 
-export default dashboard;
+export default Dashboard;

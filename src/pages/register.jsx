@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import RegisterHeader from "../components/registerHeader";
-import styles from "../styles/registerPage.module.scss";
+import "../styles/pages/_register.scss";
 
 
 const register = () => {
@@ -38,18 +38,18 @@ const register = () => {
     }
     // post
     try {
-      let { data } = await axios.post("/users", {
+      let { data } = await axios.post("register/", {
         name: values.name,
         email: values.email,
         password: values.password,
-      });
-      let token = data.token;
+      });      
+      const token = data.token;
       localStorage.setItem("token", token)
+      axios.defaults.headers.common["x-auth-token"] = `${token}`
       toast("SignUp success", {type: "success"})
       localStorage.setItem("name", values.name)
       navigate("/dashboard")
     } catch (err) {
-      console.log(err);
       toast("User already exists", {type: "error"})
     }
   }
@@ -59,16 +59,16 @@ const register = () => {
     <div>
       <RegisterHeader />
 
-      <div className={styles.container}>
-        <div className={styles.texts}>
+      <div className="register_container">
+        <div className="texts">
           <h1>Sign Up</h1>
           <br />
-          <div className={styles.info}>
+          <div className="info">
             <i className="bx bxs-user"></i>
             <h2>Create Your Account</h2>
           </div>
         </div>
-        <form className={styles.form} onSubmit={submit}>
+        <form className="form" onSubmit={submit}>
           <input
             type="text"
             name="name"
@@ -108,7 +108,7 @@ const register = () => {
         <br />
         <h4>
           Already have an account?{" "}
-          <Link to="/login" className={styles.link}>
+          <Link to="/login" className="link">
             Sign In
           </Link>
         </h4>

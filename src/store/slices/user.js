@@ -17,19 +17,15 @@ const userSlice = createSlice({
   reducers: {
     UserAllInfo(state, action) {
       state.userAllInfo.push(action.payload);
-      localStorage.setItem("userallinfo", JSON.stringify(state.userAllInfo));
     },
     Experience(state, action) {
-      // console.log("userdataas:", state.userdatas);
-      // state.userdatas.concat(action.payload);
-      // let data = axios.get("/profile/experience")
-      state.userdatas.shift();
-      state.userdatas.push(action.payload);
+      // Replace with all experiences from backend
+      state.userdatas = [action.payload];
       localStorage.setItem("experiences", JSON.stringify(state.userdatas));
     },
     Education(state, action) {
-      state.educations.shift();
-      state.educations.push(action.payload);
+      // Replace with all educations from backend
+      state.educations = [action.payload];
       localStorage.setItem("educations", JSON.stringify(state.educations));
     },
     Like(state, action) {

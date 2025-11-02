@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Header from "../components/dashboardHeader";
 import { PostsLike, Allposts } from "../store/slices/user";
-import styles from "../styles/dashboardPage.module.scss";
+import "../styles/pages/_posts.scss";
 
 const posts = () => {
   const [postData, setPostData] = useState([]);
@@ -15,6 +15,7 @@ const posts = () => {
   const [createpost, setCreatepost] = useState({});
   const [rlike , setRLike] = useState(true)
   const [rdislike , setRdisLike] = useState(true)
+  const [currentUserId, setCurrentUserId] = useState("")
 
   if (!localStorage.getItem("token")) {
     useEffect(() => navigate("/login"), []);
@@ -27,8 +28,16 @@ const posts = () => {
         axios.defaults.headers.common["x-auth-token"] =
         localStorage.getItem("token");
         setPostData(data.data);
-      } catch (err) {
-        console.log(err);
+        } catch (err) {
+          toast("Failed to load posts", { type: "error" });
+      }
+    })();
+    (async function me(){
+      try{
+        const { data } = await axios.get('/profile/me')
+        setCurrentUserId(data?.user?._id || "")
+      }catch(e){
+        // ignore
       }
     })();
   }, [createpost, rlike, rdislike]);
@@ -60,33 +69,41 @@ const posts = () => {
   async function createPost(e) {
     e.preventDefault();
     e.target.reset();
-    let data = await axios.post("/posts", {
-      text: postValue,
-    });
+    if(!postValue.trim()){
+      toast("Post text is required", { type: "error" })
+      return;
+    }
+    let data = await axios.post("/posts", { text: postValue });
     setCreatepost(data.data);
-    console.log(data);
+  }
+  async function deletePost(id){
+    try{
+      await axios.delete(`/posts/${id}`)
+      setPostData((prev)=> prev.filter(p => p._id !== id))
+      toast("Post deleted", {type: 'success'})
+    }catch(err){
+      toast("Unable to delete post", {type: 'error'})
+    }
   }
   localStorage.setItem("myposts", JSON.stringify(createpost));
-
-  // console.log(postData);
 
   return (
     <div>
       <Header />
-      <div className={styles.container}>
-        <div className={styles.texts}>
+      <div className="posts_container">
+        <div className="texts">
           <h1>Posts</h1>
-          <div className={styles.info}>
+          <div className="info">
             <i className="bx bxs-user"></i>
             <h2>Welcome to the community</h2>
           </div>
         </div>
         <br />
-        <h2 className={styles.text_saysomething}>Say Something...</h2>
+        <h2 className="text_saysomething">Say Something...</h2>
         <br />
-        <form className={styles.form} onSubmit={createPost}>
+        <form className="form" onSubmit={createPost}>
           <textarea
-            className={styles.textarea}
+            className="textarea"
             name="text"
             id="text"
             cols="50"
@@ -96,7 +113,7 @@ const posts = () => {
           ></textarea>
           <br />
           <br />
-          <button className={styles.button} type="submit">
+          <button className="button" type="submit">
             Submit
           </button>
         </form>
@@ -106,29 +123,29 @@ const posts = () => {
           <h1 style={{ textAlign: "center" }}>Just a second...</h1>
         ) : (
           postData.map((p, index) => (
-            <div className={styles.userposts} key={index}>
-              <Link to={`/profile/${p.user}`} className={styles.linktoprofile}>
-                <div className={styles.img_name}>
+            <div className="userposts" key={index}>
+              <Link to={`/profile/${p.user}`} className="linktoprofile">
+                <div className="img_name">
                   <img src={p.avatar} alt="" />
                   <p>{p.name}</p>
                 </div>
               </Link>
 
-              <div className={styles.postnameandlikes}>
+              <div className="postnameandlikes">
                 <div className="post_name">
                   <h2>{p.text}</h2>
                 </div>
                 <br />
-                <div className={styles.post_date}>Posted on {p.date}</div>
+                <div className="post_date">Posted on {p.date}</div>
                 <br />
                 <br />
-                <div className={styles.btns}>
-                  <div className={styles.like} onClick={() => like(p._id)}>
+                <div className="btns">
+                  <div className="like" onClick={() => like(p._id)}>
                     <i className="bx bxs-like"></i>
                     <span>{p.likes.length}</span>
                   </div>
                   <div
-                    className={styles.dislike}
+                    className="dislike"
                     onClick={() => dislike(p._id)}
                   >
                     <i className="bx bxs-dislike"></i>
@@ -136,17 +153,20 @@ const posts = () => {
                   </div>
                   <Link
                     to={`/posts/${p._id}`}
-                    className={styles.linktodiscussion}
+                    className="linktodiscussion"
                   >
-                    <div className={styles.discussion}>
+                    <div className="discussion">
                       Discussion{" "}
-                      {p.comments?.length === 0 ? (
-                        console.log()
-                      ) : (
-                        <span>{p.comments?.length}</span>
+                      {p.comments && p.comments > 0 && (
+                        <span>{p.comments}</span>
                       )}
                     </div>
                   </Link>
+                  {currentUserId && p.user === currentUserId && (
+                    <div className="removepost" onClick={()=>deletePost(p._id)}>
+                      <i className='bx bx-x' ></i>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

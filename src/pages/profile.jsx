@@ -2,7 +2,7 @@ import React, { useEffect, useReducer, useState } from "react";
 import axios from "axios";
 import RegisterHeader from "../components/registerHeader";
 import DashboardHeader from "../components/dashboardHeader";
-import styles from "../styles/registerPage.module.scss";
+import "../styles/pages/_profile.scss";
 import { Link, useParams } from "react-router-dom";
 
 const profile = () => {
@@ -19,11 +19,11 @@ const profile = () => {
   return (
     <div>
       {localStorage.getItem("token") ? <DashboardHeader /> : <RegisterHeader />}
-      <div className={styles.p_container}>
+      <div className="profile_container">
         {/* texts */}
-        <div className={styles.texts}>
+        <div className="texts">
           <h1>Developers</h1>
-          <div className={styles.info}>
+          <div className="info">
             <i className="bx bxl-gitlab"></i>
             <h2>Browse and connect with developers</h2>
           </div>
@@ -35,12 +35,12 @@ const profile = () => {
           <h1>Just a second...</h1>
         ) : (
           Userdata.map((i, index) => (
-            <div className={styles.card} key={index}>
-              <div className={styles.img_names}>
+            <div className="card" key={index}>
+              <div className="img_names">
                 <Link to={`/profile/${i.user?._id}`}>
                   <img src={i.user?.avatar} alt="" />
                 </Link>
-                <div className={styles.names}>
+                <div className="names">
                   <h1>{i.user?.name}</h1>
                   <div>
                     {i.status} {i.company != "" ? <p>at</p> : <p></p>}{" "}
@@ -49,15 +49,15 @@ const profile = () => {
                   <p>{i.location}</p>
                   <Link
                     to={`/profile/${i.user?._id}`}
-                    className={styles.button}
+                    className="button"
                   >
                     View Profile
                   </Link>
                 </div>
               </div>
-              <div className={styles.skills}>
+              <div className="skills">
                 {i.skills.map((s, index) => (
-                  <div className={styles.skill} key={index}>
+                  <div className="skill" key={index}>
                     <i className="bx bx-check"></i>
                     <p>{s}</p>
                   </div>

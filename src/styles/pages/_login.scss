@@ -1,0 +1,114 @@
+/* ===========================
+   LOGIN PAGE
+=========================== */
+
+@import '../components/buttons';
+
+.login_container {
+  width: 1000px;
+  margin: 20px auto;
+
+  .texts {
+    h1 {
+      color: var(--color-primary);
+      font-size: 50px;
+    }
+
+    .info {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      
+      i, h2 {
+        font-size: 35px;
+      }
+    }
+  }
+
+  .form {
+    input {
+      width: 100%;
+      margin-top: 1rem;
+      margin-bottom: 10px;
+      height: 48px;
+      font-size: 18px;
+      padding: 0 16px;
+      outline: none;
+      border: 1px solid var(--color-muted-2);
+      border-radius: var(--radius-md);
+      background: var(--color-bg-plate);
+      transition: all 0.2s ease;
+
+      &:focus {
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+      }
+    }
+
+    button {
+      @extend .btn_primary;
+      margin-top: 1rem;
+      justify-content: center;
+      text-align: center;
+    }
+  }
+
+  .link {
+    color: var(--color-primary);
+  }
+}
+
+/* ===========================
+   RESPONSIVE LOGIN PAGE
+=========================== */
+
+@media (max-width: 768px) {
+  .login_container {
+    width: 100%;
+    padding: 0 20px;
+    margin: 20px auto;
+
+    .texts {
+      h1 {
+        font-size: 32px;
+      }
+
+      .info {
+        i, h2 {
+          font-size: 24px;
+        }
+      }
+    }
+
+    .form {
+      input {
+        font-size: 16px;
+        height: 44px;
+      }
+
+      button {
+        width: 100%;
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .login_container {
+    width: 90%;
+    max-width: 800px;
+
+    .texts {
+      h1 {
+        font-size: 42px;
+      }
+
+      .info {
+        i, h2 {
+          font-size: 30px;
+        }
+      }
+    }
+  }
+}

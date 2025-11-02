@@ -5,7 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Header from "../components/dashboardHeader";
 import { Like } from "../store/slices/user";
-import styles from "../styles/dashboardPage.module.scss";
+import "../styles/pages/post.scss";
 
 const post = () => {
   const { id } = useParams();
@@ -16,13 +16,27 @@ const post = () => {
   const [comments, setComments] = useState([]);
   const [tdiscussion, setTdiscussion] = useState({});
   const [postValue, setpostValue] = useState("");
+  const [currentUserId, setCurrentUserId] = useState("");
 
   useEffect(() => {
-    let res = axios.get(`/posts/${id}`).then((data) => {
-      setPostData(data.data);
-      console.log(data);
-    });
-  }, []);
+    (async function fetchPost() {
+      try {
+        const { data } = await axios.get(`/posts/${id}`);
+        setPostData(data);
+        setComments(data.comments || []);
+      } catch (err) {
+        // Error handled silently
+      }
+    })();
+    (async function me() {
+      try {
+        const { data } = await axios.get("/profile/me");
+        setCurrentUserId(data?.user?._id || "");
+      } catch (e) {
+        // ignore
+      }
+    })();
+  }, [id]);
 
   async function like() {
     try {
@@ -51,46 +65,75 @@ const post = () => {
   async function createDiscussion(e) {
     e.preventDefault();
     e.target.reset();
-    let data = await axios.post(`/posts/comment${postData?._id}`, {
-      text: postValue,
-    });
-    console.log(data);
+    if (!postValue.trim()) {
+      toast("Comment text is required", { type: "error" });
+      return;
+    }
+    try {
+      const { data } = await axios.post(`/posts/comment/${postData?._id}`, {
+        text: postValue,
+      });
+      setComments((prev) => [data, ...prev]);
+    } catch (err) {
+      toast("Failed to create comment", { type: "error" });
+    }
+  }
+
+  async function deletePost() {
+    try {
+      await axios.delete(`/posts/${id}`);
+      toast("Post deleted", { type: "success" });
+      window.history.back();
+    } catch (err) {
+      toast("Unable to delete post", { type: "error" });
+    }
+  }
+
+  async function deleteComment(commentId) {
+    try {
+      await axios.delete(`/posts/comment/${id}/${commentId}`);
+      setComments((prev) => prev.filter((c) => c._id !== commentId));
+      toast("Comment deleted", { type: "success" });
+    } catch (err) {
+      toast("Unable to delete comment", { type: "error" });
+    }
   }
 
   return (
     <div>
       <Header />
-      <div className={styles.container}>
+      <div className="post_detail_container">
         {/* button backto posts */}
-        <div className={styles.backtopostsDiv}>
-          <Link to="/posts" className={styles.backtoposts}>
+        <div className="backtopostsDiv">
+          <Link to="/posts" className="btn_back">
+            <i class="bx bx-arrow-back"></i>
             Back to posts
           </Link>
         </div>
 
         {/* comments */}
 
-        <div className={styles.userposts}>
+        <div className="userposts">
           <Link
             to={`/profile/${postData.user}`}
-            className={styles.linktoprofile}
+            className="linktoprofile"
           >
-            <div className={styles.img_name}>
+            <div className="img_name">
               <img src={postData.avatar} alt="" />
               <p>{postData.name}</p>
             </div>
           </Link>
 
-          <div className={styles.postnameandlikes}>
+          <div className="postnameandlikes">
             <div className="post_name">
               <h2>{postData.text}</h2>
             </div>
             <br />
-            <div className={styles.post_date}>Posted on {postData.date}</div>
+            <div className="post_date">Posted on {postData.date}</div>
             <br />
             <br />
-            <div className={styles.btns}>
-              <div className={styles.like} onClick={like}>
+            <div className="btns">
+              <div className="like" onClick={like}>
                 <i className="bx bxs-like"></i>
                 {/* <span>{postData.likes?.length}</span> */}
                 {plike.length === 0 ? (
@@ -99,31 +142,36 @@ const post = () => {
                   <span>{plike[0]?.length}</span>
                 )}
               </div>
-              <div className={styles.dislike} onClick={dislike}>
+              <div className="dislike" onClick={dislike}>
                 <i className="bx bxs-dislike"></i>
                 <span></span>
               </div>
               <Link
                 to={`/posts/${postData._id}`}
-                className={styles.linktodiscussion}
+                className="linktodiscussion"
               >
-                <div className={styles.discussion}>
+                <div className="discussion">
                   Discussion{" "}
                   <span style={{ visibility: visibility }}>
                     {postData.comments?.length}
                   </span>
                 </div>
               </Link>
+              {currentUserId && postData.user === currentUserId && (
+                <div className="removepost" onClick={deletePost}>
+                  <i className="bx bx-x"></i>
+                </div>
+              )}
             </div>
           </div>
         </div>
         <br />
-        <div className={styles.texts}>
-          <h2 className={styles.text_saysomething}>Leave a Comment</h2>
+        <div className="texts">
+          <h2 className="text_saysomething">Leave a Comment</h2>
           <br />
-          <form className={styles.form} onSubmit={createDiscussion}>
+          <form className="form" onSubmit={createDiscussion}>
             <textarea
-              className={styles.textarea}
+              className="textarea"
               name="text"
               id="text"
               cols="50"
@@ -133,50 +181,35 @@ const post = () => {
             ></textarea>
             <br />
             <br />
-            <button className={styles.button}>Submit</button>
+            <button className="button">Submit</button>
           </form>
         </div>
 
         {/* comments */}
 
-        {/* {Object.keys(tdiscussion).length !== 0 ? (
-          // <div className={styles.userposts}>
-          //   <Link to={`/profile/${tdiscussion.user}`} className={styles.linktoprofile}>
-          //     <div className={styles.img_name}>
-          //       <img src={tdiscussion.avatar} alt="" />
-          //       <p>{tdiscussion.name}</p>
-          //     </div>
-          //   </Link>
-          //   <div className={styles.postnameandlikes}>
-          //     <div className="post_name">
-          //       <h2>{tdiscussion.text}</h2>
-          //     </div>
-          //     <br />
-          //     <div className={styles.post_date}>Posted on {tdiscussion.date}</div>
-          //     <br />
-          //     <button>delete</button>
-          //   </div>
-          // </div>
-          
-        ) : (
-          console.log()
-        )} */}
-
         {comments.map((c, index) => (
-          <div className={styles.userposts} key={index}>
-            <Link to={`/profile/${c.user}`} className={styles.linktoprofile}>
-              <div className={styles.img_name}>
+          <div className="userposts" key={index}>
+            <Link to={`/profile/${c.user}`} className="linktoprofile">
+              <div className="img_name">
                 <img src={c.avatar} alt="" />
                 <p>{c.name}</p>
               </div>
             </Link>
-            <div className={styles.postnameandlikes}>
+            <div className="postnameandlikes">
               <div className="post_name">
                 <h2>{c.text}</h2>
               </div>
               <br />
-              <div className={styles.post_date}>Posted on {c.date}</div>
+              <div className="post_date">Posted on {c.date}</div>
               <br />
+              {currentUserId && c.user === currentUserId && (
+                <div
+                  className="removepost"
+                  onClick={() => deleteComment(c._id)}
+                >
+                  <i className="bx bx-x"></i>
+                </div>
+              )}
             </div>
           </div>
         ))}

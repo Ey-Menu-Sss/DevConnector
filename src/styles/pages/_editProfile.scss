@@ -1,0 +1,240 @@
+/* ===========================
+   EDIT PROFILE PAGE
+=========================== */
+
+@import '../components/forms';
+@import '../components/buttons';
+
+.edit_profile_container {
+  width: 1200px;
+  margin: 30px auto;
+  position: relative;
+  overflow: hidden;
+  padding: 0 20px;
+
+  .texts {
+    margin-bottom: 2rem;
+
+    h1 {
+      color: var(--color-primary);
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    div {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 24px;
+      color: var(--color-text-muted);
+      margin-bottom: 0.5rem;
+
+      i {
+        color: var(--color-primary);
+        font-size: 28px;
+      }
+    }
+
+    p {
+      margin-top: 0.5rem;
+      color: var(--color-text-muted);
+      font-size: 16px;
+      font-style: italic;
+    }
+  }
+
+  #inputs {
+    @extend .form_container;
+
+    select,
+    input[type="text"],
+    input[type="date"] {
+      @extend .form_input;
+    }
+
+    textarea {
+      @extend .form_textarea;
+    }
+
+    p {
+      margin-top: 5px;
+      color: rgb(161, 161, 161);
+      font-size: 15px;
+    }
+
+    .checkbox {
+      width: auto;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 18px;
+      margin: 1rem 0;
+      padding: 12px;
+      background: var(--color-bg-plate);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-muted-2);
+
+      input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        accent-color: var(--color-primary);
+      }
+
+      span {
+        color: var(--color-text-muted);
+        font-weight: 500;
+      }
+    }
+  }
+
+  .btn_social {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    button {
+      @extend .btn_primary;
+    }
+
+    p {
+      color: var(--color-text-muted);
+      font-size: 14px;
+      margin: 0;
+    }
+  }
+
+  .btns_submitandgoback {
+    @extend .form_button_group;
+
+    button {
+      @extend .btn_primary;
+    }
+
+    .link {
+      @extend .btn_secondary;
+    }
+  }
+
+  .socialUrls {
+    margin-top: 1rem;
+    padding: 20px;
+    background: var(--color-bg-plate);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-muted-2);
+
+    .logoandurl {
+      margin-top: 1rem;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+      input {
+        @extend .form_input;
+        height: 48px;
+      }
+
+      i {
+        font-size: 28px;
+      }
+    }
+
+    &.block {
+      display: block;
+    }
+
+    &.none {
+      display: none;
+    }
+  }
+
+  .block {
+    display: none;
+  }
+}
+
+/* ===========================
+   RESPONSIVE EDIT PROFILE PAGE
+=========================== */
+
+@media (max-width: 768px) {
+  .edit_profile_container {
+    width: 100%;
+    padding: 0 20px;
+
+    .texts {
+      h1 {
+        font-size: 32px;
+      }
+
+      div {
+        font-size: 20px;
+
+        i {
+          font-size: 24px;
+        }
+      }
+    }
+
+    #inputs {
+      padding: 20px;
+
+      select,
+      input[type="text"],
+      input[type="date"] {
+        font-size: 16px;
+        height: 44px;
+      }
+
+      textarea {
+        font-size: 16px;
+      }
+    }
+
+    .btns_submitandgoback {
+      flex-direction: column;
+      align-items: center;
+
+      button,
+      .link {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+      }
+    }
+
+    .socialUrls {
+      .logoandurl {
+        flex-direction: column;
+        align-items: stretch;
+
+        input {
+          width: 100%;
+        }
+      }
+    }
+
+    .btn_social {
+      flex-wrap: wrap;
+    }
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .edit_profile_container {
+    width: 90%;
+    max-width: 1000px;
+
+    .texts {
+      h1 {
+        font-size: 40px;
+      }
+    }
+  }
+}

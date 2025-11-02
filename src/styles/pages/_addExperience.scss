@@ -1,0 +1,148 @@
+/* ===========================
+   ADD EXPERIENCE PAGE
+=========================== */
+
+@import '../components/forms';
+@import '../components/buttons';
+
+.add_experience_container {
+  width: 1200px;
+  margin: 30px auto;
+  position: relative;
+  overflow: hidden;
+  padding: 0 20px;
+
+  .texts {
+    margin-bottom: 2rem;
+
+    h1 {
+      color: var(--color-primary);
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    div {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 24px;
+      color: var(--color-text-muted);
+      margin-bottom: 0.5rem;
+
+      i {
+        color: var(--color-primary);
+        font-size: 28px;
+      }
+    }
+
+    p {
+      margin-top: 0.5rem;
+      color: var(--color-text-muted);
+      font-size: 16px;
+      font-style: italic;
+    }
+  }
+
+  #inputs {
+    @extend .form_container;
+
+    h3 {
+      @extend .form_section_title;
+    }
+
+    input[type="text"],
+    input[type="date"] {
+      @extend .form_input;
+    }
+
+    textarea {
+      @extend .form_textarea;
+    }
+
+    .checkbox {
+      @extend .form_checkbox_group;
+
+      span {
+        margin: 0;
+      }
+    }
+  }
+
+  .btns_submitandgoback {
+    @extend .form_button_group;
+
+    button {
+      @extend .btn_primary;
+    }
+
+    .link {
+      @extend .btn_secondary;
+    }
+  }
+}
+
+/* ===========================
+   RESPONSIVE ADD EXPERIENCE PAGE
+=========================== */
+
+@media (max-width: 768px) {
+  .add_experience_container {
+    width: 100%;
+    padding: 0 20px;
+
+    .texts {
+      h1 {
+        font-size: 32px;
+      }
+
+      div {
+        font-size: 20px;
+
+        i {
+          font-size: 24px;
+        }
+      }
+    }
+
+    #inputs {
+      padding: 20px;
+
+      input[type="text"],
+      input[type="date"] {
+        font-size: 16px;
+        height: 44px;
+      }
+
+      textarea {
+        font-size: 16px;
+      }
+    }
+
+    .btns_submitandgoback {
+      flex-direction: column;
+      align-items: center;
+
+      button,
+      .link {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+      }
+    }
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .add_experience_container {
+    width: 90%;
+    max-width: 1000px;
+
+    .texts {
+      h1 {
+        font-size: 40px;
+      }
+    }
+  }
+}
+

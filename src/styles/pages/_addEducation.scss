@@ -1,0 +1,151 @@
+/* ===========================
+   ADD EDUCATION PAGE
+=========================== */
+
+@import '../components/forms';
+@import '../components/buttons';
+
+.educationContainer {
+  width: 1200px;
+  margin: 30px auto;
+  overflow: hidden;
+  padding: 0 20px;
+
+  .headerText {
+    margin-bottom: 2rem;
+
+    h1 {
+      color: var(--color-primary);
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .subtitle {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 24px;
+      color: var(--color-text-muted);
+      margin-bottom: 0.5rem;
+
+      i {
+        color: var(--color-primary);
+        font-size: 28px;
+      }
+    }
+
+    .required {
+      margin-top: 0.5rem;
+      color: var(--color-text-muted);
+      font-size: 16px;
+      font-style: italic;
+    }
+  }
+
+  .educationForm {
+    margin-top: 1.5rem;
+
+    .formGroup {
+      @extend .form_container;
+
+      input[type="text"],
+      input[type="date"],
+      select {
+        @extend .form_input;
+      }
+
+      textarea {
+        @extend .form_textarea;
+      }
+
+      label {
+        @extend .form_label;
+      }
+
+      .checkboxGroup {
+        @extend .form_checkbox_group;
+      }
+    }
+
+    .buttonGroup {
+      @extend .form_button_group;
+
+      .submitButton {
+        @extend .btn_primary;
+      }
+
+      .backButton {
+        @extend .btn_secondary;
+      }
+    }
+  }
+}
+
+/* ===========================
+   RESPONSIVE ADD EDUCATION PAGE
+=========================== */
+
+@media (max-width: 768px) {
+  .educationContainer {
+    width: 100%;
+    padding: 0 20px;
+
+    .headerText {
+      h1 {
+        font-size: 32px;
+      }
+
+      .subtitle {
+        font-size: 20px;
+
+        i {
+          font-size: 24px;
+        }
+      }
+    }
+
+    .educationForm {
+      .formGroup {
+        padding: 20px;
+
+        input[type="text"],
+        input[type="date"],
+        select {
+          font-size: 16px;
+          height: 44px;
+        }
+
+        textarea {
+          font-size: 16px;
+        }
+      }
+
+      .buttonGroup {
+        flex-direction: column;
+        align-items: center;
+
+        .submitButton,
+        .backButton {
+          width: 100%;
+          justify-content: center;
+          text-align: center;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .educationContainer {
+    width: 90%;
+    max-width: 1000px;
+
+    .headerText {
+      h1 {
+        font-size: 40px;
+      }
+    }
+  }
+}
+

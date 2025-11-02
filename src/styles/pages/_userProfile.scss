@@ -1,0 +1,358 @@
+/* ===========================
+   USER PROFILE PAGE
+=========================== */
+
+@import '../components/buttons';
+
+.userProfile_container {
+  width: 1000px;
+  margin: 50px auto;
+
+  .back {
+    @extend .btn_back;
+  }
+
+  .tipashowcase {
+    margin-top: 2rem;
+    background: var(--gradient-primary);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 80px 40px;
+    color: white;
+    border-radius: 20px;
+    box-shadow: 0 12px 32px rgba(99, 102, 241, 0.3);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+      animation: pulse 8s ease-in-out infinite;
+    }
+
+    img {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      border: 5px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      object-fit: cover;
+      z-index: 1;
+    }
+
+    .name {
+      font-size: 42px;
+      font-weight: 700;
+      margin-top: 1.5rem;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      z-index: 1;
+    }
+
+    .company {
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 0.8rem;
+      opacity: 0.95;
+      z-index: 1;
+
+      p {
+        margin: 0;
+        opacity: 0.8;
+      }
+    }
+
+    .socialLinks {
+      margin-top: 2rem;
+      display: flex;
+      align-items: center;
+      font-size: 36px;
+      gap: 1.5rem;
+      z-index: 1;
+
+      a {
+        text-decoration: none;
+        color: white;
+        transition: all 0.2s ease;
+        padding: 8px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+          transform: translateY(-3px) scale(1.1);
+          background: rgba(255, 255, 255, 0.2);
+          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+      }
+    }
+  }
+
+  .bio_skills {
+    margin-top: 2rem;
+    border: 1px solid var(--card-border);
+    padding: 32px;
+    text-align: center;
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: var(--card-shadow);
+
+    hr {
+      margin: 2rem 0;
+      border: none;
+      border-top: 1px solid var(--color-muted-2);
+    }
+
+    .bio {
+      h2 {
+        color: var(--color-primary);
+        font-size: 32px;
+        margin-bottom: 1rem;
+      }
+
+      p {
+        font-size: 18px;
+        line-height: 1.7;
+        color: var(--color-text-muted);
+        text-align: left;
+      }
+    }
+
+    .skills {
+      h2 {
+        color: var(--color-primary);
+        font-size: 32px;
+        margin-bottom: 1.5rem;
+      }
+    }
+
+    .flexallskills {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+
+      .skill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        background: var(--color-bg-plate);
+        padding: 8px 16px;
+        border-radius: var(--radius-pill);
+        border: 1px solid var(--color-muted-2);
+        font-size: 16px;
+        transition: all 0.15s ease;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+          border-color: var(--color-primary);
+        }
+
+        i {
+          color: #10b981;
+          font-size: 20px;
+        }
+      }
+    }
+  }
+
+  .expAndedu {
+    margin-top: 2rem;
+    display: flex;
+    gap: 2rem;
+
+    .experiense,
+    .education {
+      flex: 1;
+      border: 1px solid var(--card-border);
+      padding: 28px;
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(2, 6, 23, 0.1);
+      }
+
+      h3 {
+        color: var(--color-primary);
+        font-size: 28px;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.8rem;
+        border-bottom: 2px solid var(--color-muted-2);
+      }
+
+      h4 {
+        color: var(--color-text-muted);
+        font-size: 16px;
+        font-weight: 600;
+        margin-right: 0.5rem;
+        min-width: 100px;
+      }
+
+      h5 {
+        color: var(--color-text-muted);
+        font-style: italic;
+      }
+
+      .company,
+      .postion,
+      .location,
+      .description,
+      .school,
+      .feilesofstudy,
+      .degree {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+        line-height: 1.6;
+        font-size: 16px;
+      }
+
+      .date {
+        color: var(--color-text-muted);
+        font-size: 14px;
+        margin-bottom: 1rem;
+        font-weight: 500;
+      }
+
+      .description {
+        p {
+          margin: 0;
+          color: var(--color-text-muted);
+          line-height: 1.7;
+        }
+      }
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.3;
+  }
+}
+
+/* ===========================
+   RESPONSIVE USER PROFILE PAGE
+=========================== */
+
+@media (max-width: 768px) {
+  .userProfile_container {
+    width: 100%;
+    padding: 0 20px;
+    margin: 30px auto;
+
+    .tipashowcase {
+      padding: 40px 20px;
+
+      img {
+        width: 120px;
+        height: 120px;
+      }
+
+      .name {
+        font-size: 28px;
+      }
+
+      .company {
+        font-size: 18px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .socialLinks {
+        font-size: 28px;
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+
+    .bio_skills {
+      padding: 20px;
+
+      .bio {
+        h2 {
+          font-size: 24px;
+        }
+
+        p {
+          font-size: 16px;
+        }
+      }
+
+      .skills {
+        h2 {
+          font-size: 24px;
+        }
+      }
+    }
+
+    .expAndedu {
+      flex-direction: column;
+      gap: 1.5rem;
+
+      .experiense,
+      .education {
+        h3 {
+          font-size: 22px;
+        }
+
+        h4 {
+          font-size: 14px;
+          min-width: 80px;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .userProfile_container {
+    width: 90%;
+    max-width: 900px;
+
+    .tipashowcase {
+      padding: 60px 30px;
+
+      img {
+        width: 150px;
+        height: 150px;
+      }
+
+      .name {
+        font-size: 36px;
+      }
+
+      .company {
+        font-size: 20px;
+      }
+    }
+
+    .expAndedu {
+      gap: 1.5rem;
+    }
+  }
+}

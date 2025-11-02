@@ -1,39 +1,85 @@
-import React, { useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import styles from '../styles/dashboardPage.module.scss'
+import React, { useState, useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const dashboardHeader = () => {
-    const navigate = useNavigate()
-    function deleteToken() {
-        localStorage.removeItem("token")
-        useEffect(() => navigate("/login"))
+  const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  function deleteToken() {
+    localStorage.clear();
+    navigate("/login");
+  }
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target) &&
+        !event.target.closest(".menu-toggle")
+      ) {
+        closeMenu();
+      }
+    };
+
+    if (isMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
     }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMenuOpen]);
+
   return (
     <div>
-      <header id={styles.header}>
-        <Link to="/" className={styles.logo}>
+      <header id="header">
+        <Link to="/" className="logo">
           <i className="bx bx-code-alt"></i>
           <h1>DevConnector</h1>
         </Link>
-        <div className={styles.pages}>
-          <Link to="/profiles" className={styles.links}>
+        <button
+          className="menu-toggle"
+          onClick={toggleMenu}
+          aria-label="Toggle menu"
+        >
+          <i className={isMenuOpen ? "bx bx-x" : "bx bx-menu"}></i>
+        </button>
+        <div ref={menuRef} className={`pages ${isMenuOpen ? "menu-open" : ""}`}>
+          <Link to="/dashboard" className="links" onClick={closeMenu}>
+            <i className="bx bxs-user"></i>
+            Dashboard
+          </Link>
+          <Link to="/profiles" className="links" onClick={closeMenu}>
             Developers
           </Link>
-          <Link to="/posts" className={styles.links}>
+          <Link to="/posts" className="links" onClick={closeMenu}>
             Posts
           </Link>
-          <Link to="/dashboard" className={styles.links}>
-          <i className="bx bxs-user"></i>
-          Dashboard
-          </Link>
-          <Link to="/login" className={styles.links} onClick={deleteToken}>
-          <i className='bx bx-log-in'></i>
-          Logout
+          <Link
+            to="/login"
+            className="links"
+            onClick={() => {
+              deleteToken();
+              closeMenu();
+            }}
+          >
+            <i className="bx bx-log-in"></i>
+            Logout
           </Link>
         </div>
       </header>
     </div>
-  )
-}
+  );
+};
 
-export default dashboardHeader
+export default dashboardHeader;

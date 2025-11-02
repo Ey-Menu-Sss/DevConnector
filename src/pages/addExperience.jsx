@@ -5,7 +5,7 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Header from "../components/dashboardHeader";
 import { Experience } from "../store/slices/user";
-import styles from "../styles/dashboardPage.module.scss";
+import "../styles/pages/_addExperience.scss";
 
 const addExperience = () => {
   const dispatch = useDispatch();
@@ -30,6 +30,7 @@ const addExperience = () => {
         })
         .then((data) => {
           dispatch(Experience(data.data?.experience));
+          toast("Experience added successfully", { type: "success" });
           navigate("/dashboard");
         })
         .catch((err) => {
@@ -38,7 +39,7 @@ const addExperience = () => {
           });
         });
     } catch (err) {
-      console.log(err);
+      // Error handled by toast in catch block above
     }
   }
 
@@ -53,9 +54,9 @@ const addExperience = () => {
   return (
     <div>
       <Header />
-      <div className={styles.cp_container}>
+      <div className="add_experience_container">
         {/* texts tipa logo */}
-        <div className={styles.texts}>
+        <div className="texts">
           <h1>Add An Experience</h1>
           <br />
           <div>
@@ -70,7 +71,7 @@ const addExperience = () => {
         {/* Form */}
         <form onSubmit={submit}>
           {/* inputs akkaunt informations*/}
-          <section id={styles.inputs}>
+          <section id="inputs">
             <input
               type="text"
               placeholder="* Job Title"
@@ -98,8 +99,8 @@ const addExperience = () => {
             <h3>From Date</h3>
             <input type="date" name="date" onChange={onchange} />
             <br />
-            <div className={styles.checkbox}>
-              <input type="checkbox" className={styles.checkbox} />
+            <div className="checkbox">
+              <input type="checkbox" className="checkbox" />
               <span>Curren Job</span>
             </div>
             <br />
@@ -117,11 +118,11 @@ const addExperience = () => {
           </section>
 
           {/* buttons submit and go back */}
-          <div className={styles.btns_submitandgoback}>
-            <button className={styles.submit} type="submit">
+          <div className="btns_submitandgoback">
+            <button className="submit" type="submit">
               Submit
             </button>
-            <Link to="/dashboard" className={styles.link}>
+            <Link to="/dashboard" className="link">
               Go Back
             </Link>
           </div>

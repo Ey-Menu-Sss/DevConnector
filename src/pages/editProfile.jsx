@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Header from "../components/dashboardHeader";
-import styles from "../styles/dashboardPage.module.scss";
+import "../styles/pages/_editProfile.scss";
 
 const editProfile = () => {
   const [display, setDisplay] = useState("none");
@@ -13,7 +13,6 @@ const editProfile = () => {
   //   const [valueData, setValueData] = useState({});
   //   let userdatas = useSelector((s) => s.userDatas);
   let userdatas = JSON.parse(localStorage.getItem("userinfo")) || {};
-  console.log(userdatas);
 
   //   useEffect(() => {
   //     (async function inputvaluesuchun() {
@@ -123,9 +122,9 @@ const editProfile = () => {
   return (
     <div>
       <Header />
-      <div className={styles.cp_container}>
+      <div className="edit_profile_container">
         {/* texts tipa logo */}
-        <div className={styles.texts}>
+        <div className="texts">
           <h1>Edit Your Profile</h1>
           <br />
           <div>
@@ -139,7 +138,7 @@ const editProfile = () => {
         {/* Form */}
         <form onSubmit={submit}>
           {/* inputs akkaunt informations*/}
-          <section id={styles.inputs}>
+          <section id="inputs">
             <select onChange={onchange} name="job" value={values.job}>
               <option value="sps">* Select Professional Status</option>
               <option value="Developer">Developer</option>
@@ -215,7 +214,7 @@ const editProfile = () => {
           </section>
 
           {/* add social networks */}
-          <div className={styles.btn_social}>
+          <div className="btn_social">
             <button onClick={handleClick} type="button">
               Add Social Network Links
             </button>
@@ -223,8 +222,8 @@ const editProfile = () => {
           </div>
 
           {/* social urls (input) */}
-          <div className={`${styles.socialUrls} ${display}`}>
-            <div className={styles.logoandurl}>
+          <div className={`socialUrls ${display}`}>
+            <div className="logoandurl">
               <i className="bx bxl-twitter" style={{ color: "#38a1f3" }}></i>
               <input
                 type="text"
@@ -234,7 +233,7 @@ const editProfile = () => {
                 onChange={onchangeurl}
               />
             </div>
-            <div className={styles.logoandurl}>
+            <div className="logoandurl">
               <i
                 className="bx bxl-facebook-square"
                 style={{ color: "#3b5998" }}
@@ -247,7 +246,7 @@ const editProfile = () => {
                 onChange={onchangeurl}
               />
             </div>
-            <div className={styles.logoandurl}>
+            <div className="logoandurl">
               <i className="bx bxl-youtube" style={{ color: "#c4302b" }}></i>
               <input
                 type="text"
@@ -257,7 +256,7 @@ const editProfile = () => {
                 onChange={onchangeurl}
               />
             </div>
-            <div className={styles.logoandurl}>
+            <div className="logoandurl">
               <i
                 className="bx bxl-linkedin-square"
                 style={{ color: "#0077b5" }}
@@ -270,7 +269,7 @@ const editProfile = () => {
                 onChange={onchangeurl}
               />
             </div>
-            <div className={styles.logoandurl}>
+            <div className="logoandurl">
               <i
                 className="bx bxl-instagram-alt"
                 style={{ color: "rgb(255, 90, 156)" }}
@@ -286,11 +285,11 @@ const editProfile = () => {
           </div>
 
           {/* buttons submit and go back */}
-          <div className={styles.btns_submitandgoback}>
-            <button className={styles.submit} type="submit">
+          <div className="btns_submitandgoback">
+            <button className="submit" type="submit">
               Submit
             </button>
-            <Link to="/dashboard" className={styles.link}>
+            <Link to="/dashboard" className="link">
               Go Back
             </Link>
           </div>

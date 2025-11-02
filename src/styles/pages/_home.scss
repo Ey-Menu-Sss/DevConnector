@@ -1,0 +1,191 @@
+/* ===========================
+   HOME PAGE
+=========================== */
+
+.home {
+  position: relative;
+  min-height: 100vh;
+  
+  .opacityImg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100vw;
+    height: 100vh;
+    background-image: url("../../assets/showcase.33c7a31b.jpg");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    
+    .img {
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+  }
+}
+
+.body {
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 150px;
+
+  .info {
+    h1 {
+      font-size: 70px;
+    }
+    
+    p {
+      font-size: 30px;
+    }
+
+    .btns {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+
+      button {
+        padding: 12px 22px;
+        font-size: 16px;
+        border-radius: var(--radius-pill);
+        border: none;
+        background: var(--gradient-primary);
+        color: var(--color-white);
+        cursor: pointer;
+        box-shadow: var(--btn-shadow);
+        transition: transform 0.15s ease, box-shadow 0.2s ease;
+        text-align: center;
+
+        &:hover {
+          transform: translateY(-1px);
+          box-shadow: var(--btn-shadow-hover);
+        }
+
+        &:active {
+          transform: translateY(0);
+        }
+      }
+
+      .signup {
+        background-color: var(--color-primary);
+        color: var(--color-white);
+
+        &:hover {
+          color: var(--color-primary);
+          background-color: var(--color-white);
+        }
+      }
+
+      .login {
+        background-color: var(--color-white);
+        border: none;
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.9);
+          color: var(--color-primary-hover);
+        }
+      }
+    }
+  }
+}
+
+/* ===========================
+   RESPONSIVE HOME PAGE
+=========================== */
+
+@media (max-width: 768px) {
+  .body {
+    margin-top: 100px;
+    padding: 0 20px;
+
+    .info {
+      h1 {
+        font-size: 36px;
+      }
+
+      p {
+        font-size: 18px;
+      }
+
+      .btns {
+        flex-direction: row;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        position: relative;
+
+        button {
+          flex: 0 0 auto;
+          min-width: 120px;
+          font-size: 14px;
+          padding: 12px 20px;
+
+          &.signup {
+            position: relative;
+            left: auto;
+            transform: none;
+            margin: 0;
+            
+            &:hover {
+              transform: translateY(-1px);
+            }
+
+            &:active {
+              transform: translateY(0);
+            }
+          }
+
+          &.login {
+            margin-left: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .body {
+    margin-top: 120px;
+
+    .info {
+      h1 {
+        font-size: 50px;
+      }
+
+      p {
+        font-size: 24px;
+      }
+
+      .btns {
+        gap: 1.5rem;
+        
+        button {
+          padding: 12px 24px;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1440px) {
+  .body {
+    .info {
+      .btns {
+        gap: 2rem;
+        
+        button {
+          padding: 14px 28px;
+          font-size: 17px;
+        }
+      }
+    }
+  }
+}

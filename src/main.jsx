@@ -6,13 +6,11 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import axios from 'axios'
 
 // styles ...
-import './styles/registerPage.module.scss'
-import './styles/dashboardPage.module.scss'
-import './styles/main.scss' 
+import './styles/main.scss'
 import 'react-toastify/dist/ReactToastify.css';
 import "../node_modules/boxicons/css/boxicons.min.css" 
 
-axios.defaults.baseURL = "https://nt-devconnector.onrender.com/api";
+axios.defaults.baseURL = "http://localhost:8000/";
 axios.defaults.headers.common["Content-Type"] = "application/json";
 let token = localStorage.getItem("token");
 if (token) axios.defaults.headers.common["x-auth-token"] = `${token}`;
