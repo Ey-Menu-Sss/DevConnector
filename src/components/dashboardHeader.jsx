@@ -65,6 +65,10 @@ const dashboardHeader = () => {
           <Link to="/posts" className="links" onClick={closeMenu}>
             Posts
           </Link>
+          <Link to="/chatbot" className="links" onClick={closeMenu}>
+            <i className="bx bx-bot"></i>
+            ChatBot
+          </Link>
           <Link
             to="/login"
             className="links"

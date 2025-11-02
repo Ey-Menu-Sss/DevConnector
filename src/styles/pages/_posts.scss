@@ -14,7 +14,7 @@
   .texts {
     h1 {
       color: var(--color-primary);
-      font-size: 50px;
+      font-size: 36px;
     }
 
     .info {
@@ -22,7 +22,7 @@
       align-items: center;
 
       i, h2 {
-        font-size: 35px;
+        font-size: 24px;
       }
     }
   }
@@ -31,6 +31,7 @@
     background-color: var(--color-primary);
     padding: 0.7rem;
     color: var(--color-white);
+    font-size: 18px;
   }
 
   .form {
@@ -73,6 +74,26 @@
       p {
         font-size: 30px;
         text-align: center;
+      }
+    }
+
+    .postnameandlikes {
+      flex: 1;
+
+      .post_name {
+        h2 {
+          font-size: 20px;
+          text-align: left;
+          line-height: 1.6;
+          color: var(--color-text-muted);
+          margin-bottom: 0.5rem;
+        }
+      }
+
+      .post_date {
+        font-size: 11px;
+        color: var(--color-text-muted);
+        margin-bottom: 1rem;
       }
     }
 
@@ -195,13 +216,21 @@
         }
       }
 
-      .postnameandlikes {
-        width: 100%;
+    .postnameandlikes {
+      width: 100%;
 
+      .post_name {
         h2 {
           font-size: 18px;
+          text-align: left;
         }
       }
+
+      .post_date {
+        font-size: 11px;
+        color: var(--color-text-muted);
+      }
+    }
 
       .btns {
         flex-wrap: wrap;

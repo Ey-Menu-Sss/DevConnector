@@ -3,6 +3,7 @@ import axios from "axios";
 import RegisterHeader from "../components/registerHeader";
 import DashboardHeader from "../components/dashboardHeader";
 import "../styles/pages/_profile.scss";
+import { ProfileCardSkeleton } from "../components/LoadingSkeleton";
 import { Link, useParams } from "react-router-dom";
 
 const profile = () => {
@@ -32,7 +33,7 @@ const profile = () => {
         <br />
 
         {Userdata.length === 0 ? (
-          <h1>Just a second...</h1>
+          <ProfileCardSkeleton count={3} />
         ) : (
           Userdata.map((i, index) => (
             <div className="card" key={index}>

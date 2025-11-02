@@ -6,6 +6,7 @@ import axios from "axios";
 import { Education, Experience, UserAllInfo } from "../store/slices/user";
 import { toast } from "react-toastify";
 import "../styles/dashboard.scss";
+import { DashboardSkeleton } from "../components/LoadingSkeleton";
 
 const Dashboard = () => {
   const [name, setName] = useState("");
@@ -89,7 +90,7 @@ const Dashboard = () => {
         <div className="dashboardContainer">
           <h1>Dashboard</h1>
           {!use ? (
-            <h1>Loading...</h1>
+            <DashboardSkeleton />
           ) : (
             <div>
               <h2>

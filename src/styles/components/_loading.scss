@@ -1,0 +1,439 @@
+/* ===========================
+   LOADING SKELETON STYLES
+=========================== */
+
+// Base skeleton animation
+@keyframes skeleton-loading {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.skeleton-base {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e0e0e0 50%,
+    #f0f0f0 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+/* ===========================
+   POST SKELETON
+=========================== */
+
+.skeleton_post_card {
+  margin-top: 1rem;
+  border: 1px solid var(--card-border);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  background: var(--card-bg);
+  border-radius: 14px;
+  box-shadow: var(--card-shadow);
+
+  .skeleton_avatar {
+    @extend .skeleton-base;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .skeleton_content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .skeleton_name {
+    @extend .skeleton-base;
+    height: 28px;
+    width: 180px;
+  }
+
+  .skeleton_text {
+    @extend .skeleton-base;
+    height: 16px;
+    width: 100%;
+
+    &.skeleton_text_long {
+      width: 95%;
+    }
+
+    &.skeleton_text_medium {
+      width: 75%;
+    }
+  }
+
+  .skeleton_date {
+    @extend .skeleton-base;
+    height: 12px;
+    width: 120px;
+  }
+
+  .skeleton_buttons {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .skeleton_button {
+    @extend .skeleton-base;
+    height: 36px;
+    width: 80px;
+    border-radius: var(--radius-pill);
+  }
+}
+
+/* ===========================
+   PROFILE CARD SKELETON
+=========================== */
+
+.skeleton_profile_card {
+  margin-top: 1.5rem;
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 20px 24px;
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+
+  .skeleton_profile_avatar {
+    @extend .skeleton-base;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .skeleton_profile_content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 70%;
+  }
+
+  .skeleton_profile_name {
+    @extend .skeleton-base;
+    height: 28px;
+    width: 200px;
+  }
+
+  .skeleton_profile_info {
+    @extend .skeleton-base;
+    height: 18px;
+    width: 250px;
+
+    &.skeleton_profile_info_short {
+      width: 150px;
+    }
+  }
+
+  .skeleton_profile_button {
+    @extend .skeleton-base;
+    height: 32px;
+    width: 130px;
+    border-radius: var(--radius-pill);
+    margin-top: 0.5rem;
+  }
+
+  .skeleton_skills {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    justify-content: flex-start;
+  }
+
+  .skeleton_skill {
+    @extend .skeleton-base;
+    height: 32px;
+    width: 90px;
+    border-radius: var(--radius-pill);
+  }
+}
+
+/* ===========================
+   COMMENT SKELETON
+=========================== */
+
+.skeleton_comment_card {
+  display: flex;
+  gap: 1rem;
+  padding: 16px;
+  margin-top: 1rem;
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+
+  .skeleton_comment_avatar {
+    @extend .skeleton-base;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .skeleton_comment_content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .skeleton_comment_header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+
+  .skeleton_comment_name {
+    @extend .skeleton-base;
+    height: 20px;
+    width: 140px;
+  }
+
+  .skeleton_comment_date {
+    @extend .skeleton-base;
+    height: 12px;
+    width: 80px;
+  }
+
+  .skeleton_comment_text {
+    @extend .skeleton-base;
+    height: 16px;
+    width: 100%;
+
+    &.skeleton_comment_text_short {
+      width: 75%;
+    }
+  }
+}
+
+/* ===========================
+   USER PROFILE SKELETON
+=========================== */
+
+.skeleton_user_profile {
+  width: 1000px;
+  margin: 50px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  .skeleton_user_header {
+    margin-top: 2rem;
+    background: var(--gradient-primary);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 80px 40px;
+    border-radius: 20px;
+    box-shadow: 0 12px 32px rgba(99, 102, 241, 0.3);
+    gap: 1rem;
+  }
+
+  .skeleton_user_avatar_large {
+    @extend .skeleton-base;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  .skeleton_user_name {
+    @extend .skeleton-base;
+    height: 42px;
+    width: 250px;
+    background: rgba(255, 255, 255, 0.4);
+  }
+
+  .skeleton_user_company {
+    @extend .skeleton-base;
+    height: 24px;
+    width: 200px;
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  .skeleton_user_bio,
+  .skeleton_user_skills {
+    border: 1px solid var(--card-border);
+    padding: 32px;
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: var(--card-shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .skeleton_user_section_title {
+    @extend .skeleton-base;
+    height: 32px;
+    width: 200px;
+  }
+
+  .skeleton_user_text {
+    @extend .skeleton-base;
+    height: 18px;
+    width: 100%;
+
+    &:nth-child(2) {
+      width: 95%;
+    }
+
+    &:nth-child(3) {
+      width: 85%;
+    }
+  }
+
+  .skeleton_skills_container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+}
+
+/* ===========================
+   DASHBOARD SKELETON
+=========================== */
+
+.skeleton_dashboard {
+  width: 1000px;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 20px;
+}
+
+.skeleton_dashboard_title {
+  @extend .skeleton-base;
+  height: 40px;
+  width: 200px;
+}
+
+.skeleton_dashboard_cards {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.skeleton_dashboard_card {
+  @extend .skeleton-base;
+  flex: 1;
+  height: 120px;
+  border-radius: 14px;
+  border: 1px solid var(--card-border);
+}
+
+.skeleton_dashboard_section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.skeleton_dashboard_section_title {
+  @extend .skeleton-base;
+  height: 28px;
+  width: 180px;
+}
+
+.skeleton_dashboard_item {
+  @extend .skeleton-base;
+  height: 80px;
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid var(--card-border);
+}
+
+/* ===========================
+   RESPONSIVE SKELETON
+=========================== */
+
+@media (max-width: 768px) {
+  .skeleton_post_card {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 16px;
+
+    .skeleton_avatar {
+      width: 100px;
+      height: 100px;
+    }
+
+    .skeleton_content {
+      width: 100%;
+    }
+
+    .skeleton_buttons {
+      flex-wrap: wrap;
+      width: 100%;
+    }
+  }
+
+  .skeleton_profile_card {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 16px;
+
+    .skeleton_profile_content {
+      width: 100%;
+    }
+
+    .skeleton_skills {
+      width: 100%;
+      justify-content: flex-start;
+    }
+  }
+
+  .skeleton_user_profile {
+    width: 100%;
+    padding: 0 20px;
+    margin: 30px auto;
+
+    .skeleton_user_header {
+      padding: 40px 20px;
+    }
+
+    .skeleton_user_avatar_large {
+      width: 120px;
+      height: 120px;
+    }
+
+    .skeleton_user_name {
+      width: 200px;
+      height: 28px;
+    }
+
+    .skeleton_user_company {
+      width: 150px;
+      height: 18px;
+    }
+  }
+
+  .skeleton_dashboard {
+    width: 100%;
+    padding: 0 20px;
+  }
+
+  .skeleton_dashboard_cards {
+    flex-direction: column;
+  }
+}
+

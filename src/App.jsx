@@ -13,7 +13,8 @@ import AddExperience from './pages/addExperience'
 import AddEducation from './pages/addEducation' 
 import NotFound from './pages/notFoundPage' 
 import Post from './pages/post' 
-import ChatBot from './pages/chatBot' 
+import ChatBot from './pages/chatBot'
+import ComingSoon from './pages/comingSoon' 
 function App() {
 
   return (
@@ -32,6 +33,7 @@ function App() {
         <Route path='/add-experience' element={<AddExperience/>}/>
         <Route path='/add-education' element={<AddEducation/>}/>
         <Route path='/chatbot' element={<ChatBot/>}/>
+        <Route path='/coming-soon' element={<ComingSoon/>}/>
         <Route path='*' element={<NotFound/>}/>
       </Routes>
     </div>

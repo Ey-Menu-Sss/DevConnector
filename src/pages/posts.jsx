@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import Header from "../components/dashboardHeader";
 import { PostsLike, Allposts } from "../store/slices/user";
 import "../styles/pages/_posts.scss";
+import { PostSkeleton } from "../components/LoadingSkeleton";
 
 const posts = () => {
   const [postData, setPostData] = useState([]);
@@ -120,7 +121,7 @@ const posts = () => {
         <br />
 
         {Object.keys(postData).length === 0 ? (
-          <h1 style={{ textAlign: "center" }}>Just a second...</h1>
+          <PostSkeleton count={3} />
         ) : (
           postData.map((p, index) => (
             <div className="userposts" key={index}>

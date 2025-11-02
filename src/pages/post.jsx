@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import Header from "../components/dashboardHeader";
 import { Like } from "../store/slices/user";
 import "../styles/pages/post.scss";
+import { PostSkeleton, CommentSkeleton } from "../components/LoadingSkeleton";
 
 const post = () => {
   const { id } = useParams();
@@ -111,28 +112,31 @@ const post = () => {
           </Link>
         </div>
 
-        {/* comments */}
+        {/* Post section */}
+        <h2 className="section_title">Posts</h2>
+        {Object.keys(postData).length === 0 ? (
+          <PostSkeleton count={1} />
+        ) : (
+          <div className="userposts">
+            <Link
+              to={`/profile/${postData.user}`}
+              className="linktoprofile"
+            >
+              <div className="img_name">
+                <img src={postData.avatar} alt="" />
+                <p>{postData.name}</p>
+              </div>
+            </Link>
 
-        <div className="userposts">
-          <Link
-            to={`/profile/${postData.user}`}
-            className="linktoprofile"
-          >
-            <div className="img_name">
-              <img src={postData.avatar} alt="" />
-              <p>{postData.name}</p>
-            </div>
-          </Link>
-
-          <div className="postnameandlikes">
-            <div className="post_name">
-              <h2>{postData.text}</h2>
-            </div>
-            <br />
-            <div className="post_date">Posted on {postData.date}</div>
-            <br />
-            <br />
-            <div className="btns">
+            <div className="postnameandlikes">
+              <div className="post_name">
+                <h2>{postData.text}</h2>
+              </div>
+              <br />
+              <div className="post_date">Posted on {postData.date}</div>
+              <br />
+              <br />
+              <div className="btns">
               <div className="like" onClick={like}>
                 <i className="bx bxs-like"></i>
                 {/* <span>{postData.likes?.length}</span> */}
@@ -165,54 +169,56 @@ const post = () => {
             </div>
           </div>
         </div>
+        )}
         <br />
-        <div className="texts">
-          <h2 className="text_saysomething">Leave a Comment</h2>
-          <br />
-          <form className="form" onSubmit={createDiscussion}>
-            <textarea
-              className="textarea"
-              name="text"
-              id="text"
-              cols="50"
-              rows="4"
-              onChange={onchange}
-              placeholder="Comment the post"
-            ></textarea>
-            <br />
-            <br />
-            <button className="button">Submit</button>
-          </form>
-        </div>
-
-        {/* comments */}
-
-        {comments.map((c, index) => (
-          <div className="userposts" key={index}>
-            <Link to={`/profile/${c.user}`} className="linktoprofile">
-              <div className="img_name">
-                <img src={c.avatar} alt="" />
-                <p>{c.name}</p>
-              </div>
-            </Link>
-            <div className="postnameandlikes">
-              <div className="post_name">
-                <h2>{c.text}</h2>
-              </div>
+        {Object.keys(postData).length > 0 && (
+          <>
+            <div className="texts">
+              <h2 className="text_saysomething">Leave a Comment</h2>
               <br />
-              <div className="post_date">Posted on {c.date}</div>
-              <br />
-              {currentUserId && c.user === currentUserId && (
-                <div
-                  className="removepost"
-                  onClick={() => deleteComment(c._id)}
-                >
-                  <i className="bx bx-x"></i>
-                </div>
-              )}
+              <form className="form" onSubmit={createDiscussion}>
+                <textarea
+                  className="textarea"
+                  name="text"
+                  id="text"
+                  cols="50"
+                  rows="4"
+                  onChange={onchange}
+                  placeholder="Comment the post"
+                ></textarea>
+                <br />
+                <br />
+                <button className="button">Submit</button>
+              </form>
             </div>
-          </div>
-        ))}
+
+            {/* Comments section */}
+            <br />
+            <h2 className="section_title">Comments</h2>
+            {comments.map((c, index) => (
+              <div className="comment_item" key={index}>
+                <Link to={`/profile/${c.user}`} className="comment_avatar_link">
+                  <img src={c.avatar} alt="" className="comment_avatar" />
+                </Link>
+                <div className="comment_content">
+                  <div className="comment_header">
+                    <h3 className="comment_author">{c.name}</h3>
+                    <span className="comment_date">{c.date}</span>
+                  </div>
+                  <p className="comment_text">{c.text}</p>
+                  {currentUserId && c.user === currentUserId && (
+                    <button
+                      className="remove_comment_btn"
+                      onClick={() => deleteComment(c._id)}
+                    >
+                      Remove Comment
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </>
+        )}
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import "../styles/pages/_userProfile.scss";
 import Header from "../components/dashboardHeader";
 import axios from "axios";
+import { UserProfileSkeleton } from "../components/LoadingSkeleton";
 
 const userProfile = () => {
   const { id } = useParams();
@@ -23,7 +24,7 @@ const userProfile = () => {
         </Link>
         <br />
         {Object.keys(proData).length === 0 ? (
-          <h1 style={{ marginTop: "2rem" }}>Just a second...</h1>
+          <UserProfileSkeleton />
         ) : (
           <div className="informations">
             <div className="tipashowcase">
@@ -66,6 +67,9 @@ const userProfile = () => {
                     <i className="bx bxl-youtube"></i>
                   </a>
                 )}
+                <Link to="/coming-soon" className="social_chat_link">
+                  <i className="bx bx-chat"></i>
+                </Link>
               </div>
             </div>
             <br />
