@@ -5,11 +5,7 @@ const dashboardHeader = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
-
-  function deleteToken() {
-    localStorage.clear();
-    navigate("/login");
-  }
+  const [myProfilePath, setMyProfilePath] = useState("/my-profile");
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -40,6 +36,11 @@ const dashboardHeader = () => {
     };
   }, [isMenuOpen]);
 
+  useEffect(() => {
+    // keep static route to personal profile management page
+    setMyProfilePath("/my-profile");
+  }, []);
+
   return (
     <div>
       <header id="header">
@@ -56,8 +57,8 @@ const dashboardHeader = () => {
         </button>
         <div ref={menuRef} className={`pages ${isMenuOpen ? "menu-open" : ""}`}>
           <Link to="/dashboard" className="links" onClick={closeMenu}>
-            <i className="bx bxs-user"></i>
-            Dashboard
+            <i className='bx bx-message-rounded-dots'></i>
+            Chat
           </Link>
           <Link to="/profiles" className="links" onClick={closeMenu}>
             Developers
@@ -67,19 +68,37 @@ const dashboardHeader = () => {
           </Link>
           <Link to="/chatbot" className="links" onClick={closeMenu}>
             <i className="bx bx-bot"></i>
-            ChatBot
+            AI ChatBot
           </Link>
-          <Link
-            to="/login"
+          <button
             className="links"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+              padding: 0,
+            }}
             onClick={() => {
-              deleteToken();
+              navigate(myProfilePath);
               closeMenu();
             }}
+            aria-label="Go to my profile"
           >
-            <i className="bx bx-log-in"></i>
-            Logout
-          </Link>
+            <span
+              style={{
+                width: 28,
+                height: 28,
+                borderRadius: "50%",
+                border: "2px solid currentColor",
+                display: "inline-block",
+              }}
+            />
+            <span>Profile</span>
+          </button>
+          {null}
         </div>
       </header>
     </div>

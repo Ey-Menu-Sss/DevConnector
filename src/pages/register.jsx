@@ -47,8 +47,8 @@ const register = () => {
       localStorage.setItem("token", token)
       axios.defaults.headers.common["x-auth-token"] = `${token}`
       toast("SignUp success", {type: "success"})
-      localStorage.setItem("name", values.name)
-      navigate("/dashboard")
+      localStorage.setItem("", values.name)
+      navigate("/my-profile")
     } catch (err) {
       toast("User already exists", {type: "error"})
     }

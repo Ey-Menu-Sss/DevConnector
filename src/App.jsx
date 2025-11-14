@@ -15,6 +15,7 @@ import NotFound from './pages/notFoundPage'
 import Post from './pages/post' 
 import ChatBot from './pages/chatBot'
 import ComingSoon from './pages/comingSoon' 
+import MyProfile from './pages/myProfile'
 function App() {
 
   return (
@@ -32,6 +33,7 @@ function App() {
         <Route path='/edit-profile' element={<EditProfile/>}/>
         <Route path='/add-experience' element={<AddExperience/>}/>
         <Route path='/add-education' element={<AddEducation/>}/>
+        <Route path='/my-profile' element={<MyProfile/>}/>
         <Route path='/chatbot' element={<ChatBot/>}/>
         <Route path='/coming-soon' element={<ComingSoon/>}/>
         <Route path='*' element={<NotFound/>}/>

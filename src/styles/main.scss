@@ -22,6 +22,7 @@
     --color-muted-2: #e5e7eb; /* gray-200 */
     --color-muted-3: #d1d5db; /* gray-300 */
     --color-bg-plate: #f9fafb; /* gray-50 */
+    --color-text: #111827; /* gray-900 */
     --color-text-muted: #6b7280; /* gray-500 */
     --color-input-bg: rgb(228, 228, 255);
     --color-input-border: rgb(197, 197, 255);
@@ -41,12 +42,12 @@
     --card-bg: #ffffff;
     --card-border: rgba(99, 102, 241, 0.12);
     --card-shadow: 0 6px 18px rgba(2, 6, 23, 0.06);
+    --chat-onhover-bg: #f0f0f0;
 }
 
 .block {
     display: block;
 }
-
 .none {
     display: none;
 }

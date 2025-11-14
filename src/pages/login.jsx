@@ -31,13 +31,16 @@ const login = () => {
       const { data } = await axios.post("login/", {
         email: values.email,
         password: values.password,
+      }, {
+        withCredentials: true,
       });
+  
 
       if(data.token){
         toast("login success", {type: "success"})
         localStorage.setItem("token", data.token)
         axios.defaults.headers.common["x-auth-token"] = `${data.token}`
-        navigate("/dashboard")
+        navigate("/my-profile")
       }
     } catch (err) {
       toast("Invalid Credentials", {type: "error"})
