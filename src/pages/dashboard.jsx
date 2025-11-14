@@ -22,7 +22,8 @@ const Dashboard = () => {
   const socketRef = useRef(null);
   const user = JSON.parse(localStorage.getItem("userinfo"));
   const userId = user ? user.user._id : null;
-  const socketUrl = `ws://localhost:8000/ws/chat/`;
+  // const socketUrl = `ws://localhost:8000/ws/chat/`;
+  const socketUrl = `wss://wortex-devconnector.netlify.app/ws/chat/`;
 
   const navigate = useNavigate();
 
