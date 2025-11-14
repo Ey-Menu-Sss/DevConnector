@@ -23,7 +23,7 @@ const Dashboard = () => {
   const user = JSON.parse(localStorage.getItem("userinfo"));
   const userId = user ? user.user._id : null;
   // const socketUrl = `ws://localhost:8000/ws/chat/`;
-  const socketUrl = `wss://https://devconnector-backend-yy5b.onrender.com/ws/chat/`;
+  const socketUrl = `wss://devconnector-backend-yy5b.onrender.com/ws/chat/`;
 
   const navigate = useNavigate();
 
