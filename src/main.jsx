@@ -13,6 +13,7 @@ import "../node_modules/boxicons/css/boxicons.min.css"
 // axios.defaults.baseURL = "http://localhost:8000/";
 axios.defaults.baseURL = "https://devconnector-backend-yy5b.onrender.com/";
 axios.defaults.headers.common["Content-Type"] = "application/json";
+axios.defaults.withCredentials = true;
 let token = localStorage.getItem("token");
 if (token) axios.defaults.headers.common["x-auth-token"] = `${token}`;
 // App file ...
