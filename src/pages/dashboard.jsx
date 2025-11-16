@@ -51,9 +51,11 @@ const Dashboard = () => {
 
       if (data?.action === "user_chats") {
         let chats = data.chats;
+        print(chats)
         setUsers(chats);
       }
       if (data?.action === "chat_messages") {
+        print(data.messages)
         setMessages(data.messages);
       }
       if (data?.type === "chat_message") {
@@ -136,6 +138,7 @@ const Dashboard = () => {
   };
 
   const handleShowChatWindow = (user) => {
+    print("currentuser:", user)
     user?.chat_id
       ? sendSignal("get_messages", {
           chat_id: user.chat_id,
