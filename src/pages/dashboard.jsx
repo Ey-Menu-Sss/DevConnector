@@ -107,12 +107,12 @@ const Dashboard = () => {
     !messages
       ? sendSignal("new_chat", {
           sender_id: userId,
-          receiver_id: currentUser.user_id,
+          receiver_id: currentUser.id,
           text: messageInput,
         })
       : sendSignal("send_message", {
           sender_id: userId,
-          receiver_id: currentUser.user_id,
+          receiver_id: currentUser.id,
           text: messageInput,
           chat_id: currentUser.chat_id,
         });
