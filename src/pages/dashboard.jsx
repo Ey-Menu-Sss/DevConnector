@@ -39,6 +39,8 @@ const Dashboard = () => {
     //  Connection opened
 
     socket.onopen = (event) => {
+      console.log("connected to websocket!");
+      console.log(userId);
       sendSignal("get_user_chats", { user_id: userId });
     };
 
@@ -67,12 +69,16 @@ const Dashboard = () => {
     // Handle WebSocket errors and closure
 
     socket.onerror = (error) => {
+      console.log("Error!!!");
+      
       // Handle error
     };
 
     // Connection closed
 
     socket.onclose = (event) => {
+      console.log("Disconnected!");
+      
       // Connection closed
     };
   }, []);
