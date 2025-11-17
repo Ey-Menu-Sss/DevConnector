@@ -154,6 +154,7 @@ const Dashboard = () => {
       : setMessages([]);
 
     setCurrentUser(user);
+    setMessages([])
   };
 
   async function handleSearchUser(e) {
