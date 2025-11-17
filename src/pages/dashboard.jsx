@@ -114,6 +114,9 @@ const Dashboard = () => {
   const handleSendMessage = () => {
     if (messageInput.trim() === "") return;
 
+    console.log("messages:", messages);
+    
+
     !messages
       ? sendSignal("new_chat", {
           sender_id: userId,
