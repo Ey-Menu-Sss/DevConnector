@@ -62,6 +62,8 @@ const Dashboard = () => {
       }
       if (data?.type === "chat_message") {
         let new_message = data.message;
+        console.log(new_message);
+        
         setMessages((prev) => [...prev, new_message])
       }
     };
