@@ -117,7 +117,7 @@ const Dashboard = () => {
     console.log("messages:", messages);
     
 
-    !messages
+    !messages.length
       ? sendSignal("new_chat", {
           sender_id: userId,
           receiver_id: currentUser.id,
