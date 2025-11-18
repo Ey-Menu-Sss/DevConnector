@@ -28,9 +28,10 @@ const MyProfile = () => {
       axios.defaults.headers.common["x-auth-token"] =
         localStorage.getItem("token");
       const res = await axios.get("/profile/me");
-      console.log(res.data);
-      
-      res.data && localStorage.setItem("userinfo", JSON.stringify(res.data));
+
+      res.data.status
+        ? res.data && localStorage.setItem("userinfo", JSON.stringify(res.data))
+        : localStorage.setItem("user", JSON.stringify(res.data));
 
       setName(res.data?.user?.name);
       setProfile(res.data);
@@ -160,7 +161,13 @@ const MyProfile = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="4" style={{ textAlign: "center", color: "var(--color-text-muted)" }}>
+                    <td
+                      colSpan="4"
+                      style={{
+                        textAlign: "center",
+                        color: "var(--color-text-muted)",
+                      }}
+                    >
                       No experiences yet
                     </td>
                   </tr>
@@ -199,7 +206,13 @@ const MyProfile = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="4" style={{ textAlign: "center", color: "var(--color-text-muted)" }}>
+                    <td
+                      colSpan="4"
+                      style={{
+                        textAlign: "center",
+                        color: "var(--color-text-muted)",
+                      }}
+                    >
                       No educations yet
                     </td>
                   </tr>
@@ -209,7 +222,11 @@ const MyProfile = () => {
           </div>
 
           <div className="accountActions">
-            <button className="btnPrimary" onClick={logout} style={{ borderRadius: 0 }}>
+            <button
+              className="btnPrimary"
+              onClick={logout}
+              style={{ borderRadius: 0 }}
+            >
               <i className="bx bx-log-in"></i>
               Logout
             </button>
@@ -224,5 +241,3 @@ const MyProfile = () => {
 };
 
 export default MyProfile;
-
-
