@@ -12,7 +12,12 @@ import { act } from "react";
 const Dashboard = () => {
   const [messages, setMessages] = useState([]);
 
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState([
+    {
+      id: "1",
+      name: "wortex",
+    }
+  ]);
   const [showChatOnMobile, setShowChatOnMobile] = useState(false);
 
   const [searchingUsers, setSearchingUsers] = useState([]);
@@ -32,59 +37,59 @@ const Dashboard = () => {
     useEffect(() => navigate("/login"), []);
   }
 
-  useEffect(() => {
-    // Create WebSocket connection
-    socketRef.current = new WebSocket(`${socketUrl}`);
-    const socket = socketRef.current;
+  // useEffect(() => {
+  //   // Create WebSocket connection
+  //   socketRef.current = new WebSocket(`${socketUrl}`);
+  //   const socket = socketRef.current;
 
-    //  Connection opened
+  //   //  Connection opened
 
-    socket.onopen = (event) => {
-      console.log("connected to websocket!");
-      console.log(userId);
-      sendSignal("get_user_chats", { user_id: userId });
-    };
+  //   socket.onopen = (event) => {
+  //     console.log("connected to websocket!");
+  //     console.log(userId);
+  //     sendSignal("get_user_chats", { user_id: userId });
+  //   };
 
-    //
-    //   Receive messages from the server
-    //
+  //   //
+  //   //   Receive messages from the server
+  //   //
 
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
+  //   socket.onmessage = (event) => {
+  //     const data = JSON.parse(event.data);
 
-      if (data?.action === "user_chats") {
-        let chats = data.chats;
-        console.log(chats);
-        setUsers(chats);
-      }
-      if (data?.action === "chat_messages") {
-        console.log(data.messages);
-        setMessages(data.messages);
-      }
-      if (data?.type === "chat_message") {
-        let new_message = data.message;
-        console.log(new_message);
+  //     if (data?.action === "user_chats") {
+  //       let chats = data.chats;
+  //       console.log(chats);
+  //       setUsers(chats);
+  //     }
+  //     if (data?.action === "chat_messages") {
+  //       console.log(data.messages);
+  //       setMessages(data.messages);
+  //     }
+  //     if (data?.type === "chat_message") {
+  //       let new_message = data.message;
+  //       console.log(new_message);
 
-        setMessages((prev) => [...prev, new_message]);
-      }
-    };
+  //       setMessages((prev) => [...prev, new_message]);
+  //     }
+  //   };
 
-    // Handle WebSocket errors and closure
+  //   // Handle WebSocket errors and closure
 
-    socket.onerror = (error) => {
-      console.log("Error!!!");
+  //   socket.onerror = (error) => {
+  //     console.log("Error!!!");
 
-      // Handle error
-    };
+  //     // Handle error
+  //   };
 
-    // Connection closed
+  //   // Connection closed
 
-    socket.onclose = (event) => {
-      console.log("Disconnected!");
+  //   socket.onclose = (event) => {
+  //     console.log("Disconnected!");
 
-      // Connection closed
-    };
-  }, []);
+  //     // Connection closed
+  //   };
+  // }, []);
 
   useEffect(() => {
     scrollToBottom();
@@ -263,7 +268,6 @@ const Dashboard = () => {
             <div className={`chatWindow ${!showChatOnMobile ? "mobile-hidden" : ""}`}>
               <div className="chatHeader">
                 <div className="headerUserInfo">
-                  <div className="headerUserDetails">
                     {window.innerWidth < 768 && (
                       <button
                         className="backBtn"
@@ -272,6 +276,7 @@ const Dashboard = () => {
                         <i className="bx bx-chevron-left"></i>
                       </button>
                     )}
+                  <div className="headerUserDetails">
                     <div className="headerUserName">{currentUser?.name}</div>
                     <div className="headerUserStatus">online</div>
                   </div>
