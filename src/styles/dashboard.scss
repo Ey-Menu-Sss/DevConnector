@@ -217,7 +217,7 @@
 
 /* Chat section */
 .chatContainer {
-  width: 1100px;
+  max-width: 1100px;
   margin: 30px auto;
 
   .chatSection {
@@ -810,3 +810,59 @@
     }
   }
 }
+
+/* ===========================
+   RESPONSIVE CHAT PAGE
+=========================== */
+
+@media (max-width: 768px) {
+  .chatSection {
+    display: flex;
+    width: 100%;
+    height: calc(100vh - 70px);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .chatList {
+    width: 100% !important;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: white;
+    transition: transform 0.3s ease;
+    z-index: 2;
+  }
+
+  .chatWindow {
+    width: 100% !important;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: white;
+    transition: transform 0.3s ease;
+    z-index: 3;
+  }
+
+  /* when chat window is open */
+  .chatWindow.mobile-hidden {
+    transform: translateX(100%);
+  }
+
+  /* when chat list is hidden */
+  .chatList.mobile-hidden {
+    transform: translateX(-100%);
+  }
+
+  .backBtn {
+    background: none;
+    border: none;
+    margin-right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+  }
+}
+
+

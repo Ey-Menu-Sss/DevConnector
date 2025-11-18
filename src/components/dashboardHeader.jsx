@@ -57,7 +57,7 @@ const dashboardHeader = () => {
         </button>
         <div ref={menuRef} className={`pages ${isMenuOpen ? "menu-open" : ""}`}>
           <Link to="/dashboard" className="links" onClick={closeMenu}>
-            <i className='bx bx-message-rounded-dots'></i>
+            <i className="bx bx-message-rounded-dots"></i>
             Chat
           </Link>
           <Link to="/profiles" className="links" onClick={closeMenu}>
@@ -70,23 +70,7 @@ const dashboardHeader = () => {
             <i className="bx bx-bot"></i>
             AI ChatBot
           </Link>
-          <button
-            className="links"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "8px",
-              background: "transparent",
-              border: "none",
-              cursor: "pointer",
-              padding: 0,
-            }}
-            onClick={() => {
-              navigate(myProfilePath);
-              closeMenu();
-            }}
-            aria-label="Go to my profile"
-          >
+          <Link to="/my-profile" className="links" onClick={closeMenu}>
             <span
               style={{
                 width: 28,
@@ -97,8 +81,7 @@ const dashboardHeader = () => {
               }}
             />
             <span>Profile</span>
-          </button>
-          {null}
+          </Link>
         </div>
       </header>
     </div>

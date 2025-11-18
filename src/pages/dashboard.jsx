@@ -13,6 +13,7 @@ const Dashboard = () => {
   const [messages, setMessages] = useState([]);
 
   const [users, setUsers] = useState([]);
+  const [showChatOnMobile, setShowChatOnMobile] = useState(false);
 
   const [searchingUsers, setSearchingUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
@@ -53,18 +54,18 @@ const Dashboard = () => {
 
       if (data?.action === "user_chats") {
         let chats = data.chats;
-        console.log(chats)
+        console.log(chats);
         setUsers(chats);
       }
       if (data?.action === "chat_messages") {
-        console.log(data.messages)
+        console.log(data.messages);
         setMessages(data.messages);
       }
       if (data?.type === "chat_message") {
         let new_message = data.message;
         console.log(new_message);
-        
-        setMessages((prev) => [...prev, new_message])
+
+        setMessages((prev) => [...prev, new_message]);
       }
     };
 
@@ -72,7 +73,7 @@ const Dashboard = () => {
 
     socket.onerror = (error) => {
       console.log("Error!!!");
-      
+
       // Handle error
     };
 
@@ -80,7 +81,7 @@ const Dashboard = () => {
 
     socket.onclose = (event) => {
       console.log("Disconnected!");
-      
+
       // Connection closed
     };
   }, []);
@@ -93,7 +94,7 @@ const Dashboard = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const getCurrentTime = (time) => { 
+  const getCurrentTime = (time) => {
     const date = new Date(time);
     const hours = date.getHours().toString().padStart(2, "0");
     const minutes = date.getMinutes().toString().padStart(2, "0");
@@ -115,7 +116,6 @@ const Dashboard = () => {
     if (messageInput.trim() === "") return;
 
     console.log("messages:", messages);
-    
 
     !messages.length
       ? sendSignal("new_chat", {
@@ -149,6 +149,10 @@ const Dashboard = () => {
   };
 
   const handleShowChatWindow = (user) => {
+    if (window.innerWidth < 768) {
+      setShowChatOnMobile(true);
+    }
+
     console.log("currentuser:", user);
     user?.chat_id
       ? sendSignal("get_messages", {
@@ -157,7 +161,7 @@ const Dashboard = () => {
       : setMessages([]);
 
     setCurrentUser(user);
-    setMessages([])
+    setMessages([]);
   };
 
   async function handleSearchUser(e) {
@@ -172,7 +176,6 @@ const Dashboard = () => {
       setSearchingUsers(new_data);
     } catch (err) {}
   }
-  
 
   return (
     <div>
@@ -188,7 +191,7 @@ const Dashboard = () => {
                     Chat List Area
                                       */}
 
-          <div className="chatList">
+          <div className={`chatList ${showChatOnMobile ? "mobile-hidden" : ""}`}>
             <div className="chatSearch">
               <i className="bx bx-search"></i>
               <input
@@ -257,10 +260,18 @@ const Dashboard = () => {
                                         */}
 
           {currentUser ? (
-            <div className="chatWindow">
+            <div className={`chatWindow ${!showChatOnMobile ? "mobile-hidden" : ""}`}>
               <div className="chatHeader">
                 <div className="headerUserInfo">
                   <div className="headerUserDetails">
+                    {window.innerWidth < 768 && (
+                      <button
+                        className="backBtn"
+                        onClick={() => setShowChatOnMobile(false)}
+                      >
+                        <i className="bx bx-chevron-left"></i>
+                      </button>
+                    )}
                     <div className="headerUserName">{currentUser?.name}</div>
                     <div className="headerUserStatus">online</div>
                   </div>
@@ -293,7 +304,9 @@ const Dashboard = () => {
                   >
                     <div className="messageContent">
                       <div className="messageText">{message.text}</div>
-                      <div className="messageTime">{getCurrentTime(message.time)}</div>
+                      <div className="messageTime">
+                        {getCurrentTime(message.time)}
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -330,7 +343,7 @@ const Dashboard = () => {
               </div>
             </div>
           ) : (
-            <div className="chatWindow">
+            <div className={`chatWindow ${!showChatOnMobile ? "mobile-hidden" : ""}`}>
               <div className="emptyState">
                 <h2>Select a chat to start messaging</h2>
               </div>
