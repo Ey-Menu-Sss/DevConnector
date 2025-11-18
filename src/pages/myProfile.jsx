@@ -29,9 +29,7 @@ const MyProfile = () => {
         localStorage.getItem("token");
       const res = await axios.get("/profile/me");
 
-      res.data.status
-        ? res.data && localStorage.setItem("userinfo", JSON.stringify(res.data))
-        : localStorage.setItem("user", JSON.stringify(res.data));
+      res.data.user && localStorage.setItem("user", JSON.stringify(res.data.user))
 
       setName(res.data?.user?.name);
       setProfile(res.data);
