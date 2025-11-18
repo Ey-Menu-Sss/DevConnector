@@ -28,6 +28,8 @@ const MyProfile = () => {
       axios.defaults.headers.common["x-auth-token"] =
         localStorage.getItem("token");
       const res = await axios.get("/profile/me");
+      console.log(res.data);
+      
       res.data && localStorage.setItem("userinfo", JSON.stringify(res.data));
 
       setName(res.data?.user?.name);
