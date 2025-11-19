@@ -1,5 +1,5 @@
-import React from 'react';
-import '../styles/components/_loading.scss';
+import React from "react";
+import "../styles/components/_loading.scss";
 
 export const PostSkeleton = ({ count = 3 }) => {
   return (
@@ -113,4 +113,39 @@ export const DashboardSkeleton = () => {
   );
 };
 
+export const ChatListSkeleton = () => {
+  return (
+    <div className="skeleton_chat_list">
+      {[...Array(6)].map((_, i) => (
+        <div className="skeleton_chat_item" key={i}>
+          <div className="skeleton_chat_avatar"></div>
 
+          <div className="skeleton_chat_content">
+            <div className="skeleton_chat_name"></div>
+            <div className="skeleton_chat_lastmsg"></div>
+          </div>
+
+          <div className="skeleton_chat_time"></div>
+        </div>
+      ))}
+    </div>
+  );
+};
+export const ChatWindowSkeleton = () => {
+  return (
+    <div className="skeleton_messages_area_only">
+      {[...Array(6)].map((_, i) => (
+        <div
+          key={i}
+          className={`skeleton_message_row ${
+            i % 2 === 0 ? "sent" : "received"
+          }`}
+        >
+          <div className="skeleton_msg_text"></div>
+          <div className="skeleton_msg_text short"></div>
+          <div className="skeleton_msg_time"></div>
+        </div>
+      ))}
+    </div>
+  );
+};

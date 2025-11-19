@@ -17,8 +17,9 @@
   box-shadow: 0 6px 18px rgba(16, 24, 40, 0.06);
   text-decoration: none;
 
-  svg, i { 
-    font-size: 18px; 
+  svg,
+  i {
+    font-size: 18px;
   }
 
   &:hover {
@@ -131,6 +132,27 @@
   }
 }
 
+.btn_logout {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 8px 14px;
+  font-size: 16px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--gradient-primary);
+  color: var(--color-white);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: var(--btn-shadow);
 
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--btn-shadow-hover);
+    text-decoration: none;
+  }
 
-
+  &:active {
+    transform: translateY(0);
+  }
+}

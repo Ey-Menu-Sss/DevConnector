@@ -6,15 +6,15 @@ import axios from "axios";
 import { Education, Experience, UserAllInfo } from "../store/slices/user";
 import { toast } from "react-toastify";
 import "../styles/dashboard.scss";
-import { DashboardSkeleton } from "../components/LoadingSkeleton";
-import { act } from "react";
+import {
+  ChatListSkeleton,
+  ChatWindowSkeleton,
+} from "../components/LoadingSkeleton";
 
 const Dashboard = () => {
   const [messages, setMessages] = useState([]);
-
   const [users, setUsers] = useState([]);
   const [showChatOnMobile, setShowChatOnMobile] = useState(false);
-
   const [searchingUsers, setSearchingUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [messageInput, setMessageInput] = useState("");
@@ -34,7 +34,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     // Create WebSocket connection
-    socketRef.current = new WebSocket(`${socketUrl}`);
+    socketRef.current = new WebSocket(socketUrl);
     const socket = socketRef.current;
 
     //  Connection opened
@@ -191,7 +191,9 @@ const Dashboard = () => {
                     Chat List Area
                                       */}
 
-          <div className={`chatList ${showChatOnMobile ? "mobile-hidden" : ""}`}>
+          <div
+            className={`chatList ${showChatOnMobile ? "mobile-hidden" : ""}`}
+          >
             <div className="chatSearch">
               <i className="bx bx-search"></i>
               <input
@@ -208,15 +210,15 @@ const Dashboard = () => {
                 ></i>
               )}
             </div>
-            {!users.length && (
+            {/* {!users.length && (
               <div className="emptyState">
                 <p>search and contact with users</p>
               </div>
-            )}
+            )} */}
             {/* ---- if search input not on focus, and user has chats */}
 
             <div className="chats">
-              {!isSearching &&
+              {!isSearching && users.length ? (
                 users?.map((user, index) => (
                   <div
                     className="chatItem"
@@ -229,10 +231,19 @@ const Dashboard = () => {
                     ></div>
                     <div className="chatContent">
                       <div className="userName">{user.name}</div>
-                      <div className="lastMessage">{user.lastMessage}</div>
+                      <div className="lastMessage">{user.last_message}</div>
+                    </div>
+                    <div className="lastmessage_time">
+                      <p className="l_time">
+                        {getCurrentTime(user.last_message_time)}
+                      </p>
+                      <p></p>
                     </div>
                   </div>
-                ))}
+                ))
+              ) : (
+                <ChatListSkeleton />
+              )}
 
               {/* --- showing the searching lists */}
 
@@ -260,17 +271,21 @@ const Dashboard = () => {
                                         */}
 
           {currentUser ? (
-            <div className={`chatWindow ${!showChatOnMobile ? "mobile-hidden" : ""}`}>
+            <div
+              className={`chatWindow ${
+                !showChatOnMobile ? "mobile-hidden" : ""
+              }`}
+            >
               <div className="chatHeader">
                 <div className="headerUserInfo">
-                    {window.innerWidth < 768 && (
-                      <button
-                        className="backBtn"
-                        onClick={() => setShowChatOnMobile(false)}
-                      >
-                        <i className="bx bx-chevron-left"></i>
-                      </button>
-                    )}
+                  {window.innerWidth < 768 && (
+                    <button
+                      className="backBtn"
+                      onClick={() => setShowChatOnMobile(false)}
+                    >
+                      <i className="bx bx-chevron-left"></i>
+                    </button>
+                  )}
                   <div className="headerUserDetails">
                     <div className="headerUserName">{currentUser?.name}</div>
                     <div className="headerUserStatus">online</div>
@@ -288,28 +303,32 @@ const Dashboard = () => {
                                   */}
 
               <div className="messagesArea">
-                {!messages.length && (
+                {/* {!messages.length && (
                   <div className="emptyState">
                     <p>
                       No messages here yet... <br /> Start the conversation!
                     </p>
                   </div>
-                )}
-                {messages?.map((message) => (
-                  <div
-                    key={message.id}
-                    className={`message ${
-                      message.sender_id === userId ? "sent" : "received"
-                    }`}
-                  >
-                    <div className="messageContent">
-                      <div className="messageText">{message.text}</div>
-                      <div className="messageTime">
-                        {getCurrentTime(message.time)}
+                )} */}
+                {messages.length ? (
+                  messages.map((message) => (
+                    <div
+                      key={message.id}
+                      className={`message ${
+                        message.sender_id === userId ? "sent" : "received"
+                      }`}
+                    >
+                      <div className="messageContent">
+                        <div className="messageText">{message.text}</div>
+                        <div className="messageTime">
+                          {getCurrentTime(message.time)}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <ChatWindowSkeleton />
+                )}
                 <div ref={messagesEndRef} />
               </div>
 
@@ -343,7 +362,11 @@ const Dashboard = () => {
               </div>
             </div>
           ) : (
-            <div className={`chatWindow ${!showChatOnMobile ? "mobile-hidden" : ""}`}>
+            <div
+              className={`chatWindow ${
+                !showChatOnMobile ? "mobile-hidden" : ""
+              }`}
+            >
               <div className="emptyState">
                 <h2>Select a chat to start messaging</h2>
               </div>

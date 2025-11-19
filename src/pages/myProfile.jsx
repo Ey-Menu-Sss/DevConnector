@@ -36,7 +36,7 @@ const MyProfile = () => {
       dispatch(UserAllInfo(res.data));
       setUse(true);
     } catch (err) {
-      setUse(true);
+      setUse(true); 
     }
   };
 
@@ -221,14 +221,13 @@ const MyProfile = () => {
 
           <div className="accountActions">
             <button
-              className="btnPrimary"
+              className="btn_logout"
               onClick={logout}
-              style={{ borderRadius: 0 }}
             >
               <i className="bx bx-log-in"></i>
               Logout
             </button>
-            <button className="deleteAccount" onClick={deleteAccount}>
+            <button className="btn_delete" onClick={deleteAccount}>
               Delete My Account
             </button>
           </div>

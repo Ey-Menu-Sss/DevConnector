@@ -363,6 +363,129 @@
 }
 
 /* ===========================
+   CHAT LIST SKELETON
+=========================== */
+
+.skeleton_chat_list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 12px 0;
+}
+
+.skeleton_chat_item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--card-shadow);
+
+  .skeleton_chat_avatar {
+    @extend .skeleton-base;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .skeleton_chat_content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .skeleton_chat_name {
+      @extend .skeleton-base;
+      height: 16px;
+      width: 120px;
+    }
+
+    .skeleton_chat_lastmsg {
+      @extend .skeleton-base;
+      height: 12px;
+      width: 180px;
+    }
+  }
+
+  .skeleton_chat_time {
+    @extend .skeleton-base;
+    width: 40px;
+    height: 12px;
+    border-radius: 6px;
+  }
+} 
+
+/* ===========================
+   CHAT WINDOW MESSAGES SKELETON
+=========================== */
+
+.skeleton_messages_area_only {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.skeleton_message_row {
+  max-width: 70%;
+  padding: 10px;
+  border-radius: 12px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+}
+
+.skeleton_message_row.sent {
+  align-self: flex-end;
+}
+
+.skeleton_message_row.received {
+  align-self: flex-start;
+}
+
+/* skeleton-base styles manually copied */
+.skeleton_msg_text,
+.skeleton_msg_time {
+  background: var(--skeleton-bg, #e3e3e3);
+  border-radius: 6px;
+  display: block;
+  animation: skeleton-loading 1.4s ease infinite;
+}
+
+.skeleton_msg_text {
+  height: 14px;
+  width: 90%;
+  margin-bottom: 6px;
+}
+
+.skeleton_msg_text.short {
+  width: 60%;
+}
+
+.skeleton_msg_time {
+  height: 10px;
+  width: 50px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+
+
+/* ===========================
    RESPONSIVE SKELETON
 =========================== */
 
@@ -434,6 +557,20 @@
 
   .skeleton_dashboard_cards {
     flex-direction: column;
+  }
+
+  .skeleton_chat_item {
+    padding: 10px;
+  }
+
+  .skeleton_chat_avatar {
+    width: 42px !important;
+    height: 42px !important;
+  }
+
+  .skeleton_message_row {
+    max-width: 85%;
+    padding: 8px;
   }
 }
 
