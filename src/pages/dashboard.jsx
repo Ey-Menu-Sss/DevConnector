@@ -1,10 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import Header from "../components/dashboardHeader";
-import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { Education, Experience, UserAllInfo } from "../store/slices/user";
-import { toast } from "react-toastify";
 import "../styles/dashboard.scss";
 import {
   ChatListSkeleton,
@@ -12,135 +8,143 @@ import {
 } from "../components/LoadingSkeleton";
 
 const Dashboard = () => {
+  // --- State ---
   const [messages, setMessages] = useState([]);
   const [users, setUsers] = useState([]);
-  const [showChatOnMobile, setShowChatOnMobile] = useState(false);
   const [searchingUsers, setSearchingUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
+
+  const [searchInput, setSearchInput] = useState("");
   const [messageInput, setMessageInput] = useState("");
   const [isSearching, setIsSearching] = useState(false);
+  const [hasChats, setHasChats] = useState("");
+  const [hasMessages, setHasMessages] = useState("");
+
+  const [allUsers, setAllUsers] = useState([]);
+  const [loadingAllUsers, setLoadingAllUsers] = useState(false);
+  const [showChatOnMobile, setShowChatOnMobile] = useState(false);
+  const [tab, setTab] = useState("chats");
+
+  // --- Refs ---
   const messagesEndRef = useRef(null);
   const socketRef = useRef(null);
+  const usersRef = useRef([]);
+
+  // --- User ---
   const user = JSON.parse(localStorage.getItem("user"));
-  const userId = user ? user._id : null;
-  // const socketUrl = `ws://localhost:8000/ws/chat/`;
-  const socketUrl = `wss://devconnector-backend-yy5b.onrender.com/ws/chat/`;
+  const userId = user?._id;
 
-  const navigate = useNavigate();
+  const socketUrl = "wss://devconnector-backend-yy5b.onrender.com/ws/chat/";
+  // const socketUrl = "ws://localhost:8000/ws/chat/";
 
-  if (!localStorage.getItem("token")) {
-    useEffect(() => navigate("/login"), []);
-  }
-
+  // Redirect to login if no token
   useEffect(() => {
-    // Create WebSocket connection
+    if (!localStorage.getItem("token")) {
+      navigate("/login");
+    }
+  }, []);
+
+  // --- WebSocket connection ---
+  useEffect(() => {
     socketRef.current = new WebSocket(socketUrl);
     const socket = socketRef.current;
 
-    //  Connection opened
-
-    socket.onopen = (event) => {
-      console.log("connected to websocket!");
-      console.log(userId);
+    socket.onopen = () => {
+      console.log("Connected to WebSocket");
       sendSignal("get_user_chats", { user_id: userId });
     };
 
-    //
-    //   Receive messages from the server
-    //
+    socket.onmessage = (e) => {
+      const data = JSON.parse(e.data);
 
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-
-      if (data?.action === "user_chats") {
-        let chats = data.chats;
-        console.log(chats);
-        setUsers(chats);
+      // server sends list of chats
+      if (data.action === "user_chats") {
+        !data.chats.length && setHasChats("nope");
+        setUsers(data.chats);
       }
-      if (data?.action === "chat_messages") {
-        console.log(data.messages);
+
+      // when user opens chat → server sends messages
+      if (data.action === "chat_messages") {
+        data.messages.length && setHasMessages("");
         setMessages(data.messages);
       }
-      if (data?.type === "chat_message") {
-        let new_message = data.message;
-        console.log(new_message);
 
-        setMessages((prev) => [...prev, new_message]);
+      // receiving a live message
+      if (data.type === "chat_message") {
+        setMessages((prev) => [...prev, data.message]);
+      }
+
+      if (data.action === "all_users") {
+        const mappedUsers = data.users.map((userItem) => {
+          const existingChat = usersRef.current.find(
+            (c) => c.user_id === userItem.id
+          );
+          return existingChat
+            ? {
+                ...userItem,
+                user_id: existingChat.user_id,
+                chat_id: existingChat.chat_id,
+                last_message: existingChat.last_message,
+                last_message_time: existingChat.last_message_time,
+              }
+            : userItem;
+        });
+
+        setAllUsers(mappedUsers);
       }
     };
 
-    // Handle WebSocket errors and closure
-
-    socket.onerror = (error) => {
-      console.log("Error!!!");
-
-      // Handle error
-    };
-
-    // Connection closed
-
-    socket.onclose = (event) => {
-      console.log("Disconnected!");
-
-      // Connection closed
-    };
+    socket.onerror = () => console.log("Socket error");
+    socket.onclose = () => console.log("Disconnected");
   }, []);
 
+  // Auto-scroll to bottom when messages update
   useEffect(() => {
-    scrollToBottom();
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  //
+  useEffect(() => {
+    usersRef.current = users;
+  }, [users]);
+
+  // Format message time to HH:MM
+  const getCurrentTime = (t) => {
+    const d = new Date(t);
+    return `${String(d.getHours()).padStart(2, "0")}:${String(
+      d.getMinutes()
+    ).padStart(2, "0")}`;
   };
 
-  const getCurrentTime = (time) => {
-    const date = new Date(time);
-    const hours = date.getHours().toString().padStart(2, "0");
-    const minutes = date.getMinutes().toString().padStart(2, "0");
-    return `${hours}:${minutes}`;
+  // Send message/action to websocket
+  const sendSignal = (action, payload) => {
+    socketRef.current.send(JSON.stringify({ action, message: { ...payload } }));
   };
 
-  const sendSignal = (action, message) => {
-    socketRef.current.send(
-      JSON.stringify({
-        action: action,
-        message: {
-          ...message,
-        },
-      })
-    );
-  };
-
+  // Send message
   const handleSendMessage = () => {
-    if (messageInput.trim() === "") return;
+    if (!messageInput.trim()) return;
 
-    console.log("messages:", messages);
+    // If chat doesn't exist → create new chat
+    if (!messages.length) {
+      sendSignal("new_chat", {
+        sender_id: userId,
+        receiver_id: currentUser.id,
+        text: messageInput,
+      });
+    } else {
+      sendSignal("send_message", {
+        sender_id: userId,
+        receiver_id: currentUser.user_id,
+        text: messageInput,
+        chat_id: currentUser.chat_id,
+      });
+    }
 
-    !messages.length
-      ? sendSignal("new_chat", {
-          sender_id: userId,
-          receiver_id: currentUser.id,
-          text: messageInput,
-        })
-      : sendSignal("send_message", {
-          sender_id: userId,
-          receiver_id: currentUser.user_id,
-          text: messageInput,
-          chat_id: currentUser.chat_id,
-        });
-
-    // const newMessage = {
-    //   id: messages.length + 1,
-    //   text: messageInput.trim(),
-    //   time: getCurrentTime(),
-    //   type: "sent",
-    // };
-
-    // setMessages([...messages, newMessage]);
     setMessageInput("");
   };
 
+  // Press Enter to send
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -148,110 +152,179 @@ const Dashboard = () => {
     }
   };
 
+  // When user clicks a chat/user
   const handleShowChatWindow = (user) => {
-    if (window.innerWidth < 768) {
-      setShowChatOnMobile(true);
+    if (window.innerWidth < 768) setShowChatOnMobile(true);
+
+    if (user.chat_id) {
+      sendSignal("get_messages", { chat_id: user.chat_id });
+    } else {
+      setMessages([]);
+      setHasMessages("nope");
     }
-
-    console.log("currentuser:", user);
-    user?.chat_id
-      ? sendSignal("get_messages", {
-          chat_id: user.chat_id,
-        })
-      : setMessages([]);
-
     setCurrentUser(user);
-    setMessages([]);
   };
 
-  async function handleSearchUser(e) {
+  // Search users
+  const handleSearchUser = async (text) => {
     try {
-      const { data } = await axios.get(`/search/?q=${e}`);
+      const { data } = await axios.get(`/search/?q=${text}`);
 
-      const new_data = data.map((item) => {
-        const matchedUser = users.find((user) => user.user_id === item.id);
-        return matchedUser ? { ...item, chat_id: matchedUser.chat_id } : item;
+      // attach existing chat_id to search results
+      const mapped = data.map((item) => {
+        const u = users.find((c) => c.user_id === item.id);
+        return u
+          ? {
+              ...item,
+              user_id: u.user_id,
+              last_message: u.last_message,
+              last_message_time: u.last_message_time,
+              chat_id: u.chat_id,
+            }
+          : item;
       });
 
-      setSearchingUsers(new_data);
-    } catch (err) {}
-  }
+      setSearchingUsers(mapped);
+    } catch {}
+  };
 
   return (
     <div>
       <Header />
 
       <div className="chatContainer">
-        {/* <h2>
-          <i className="bx bxs-message-dots"></i> Welcome back, {name}. Start a chat or search for users.
-        </h2> */}
-
         <div className="chatSection">
-          {/* 
-                    Chat List Area
-                                      */}
-
+          {/* ---------------- Chat List ---------------- */}
           <div
             className={`chatList ${showChatOnMobile ? "mobile-hidden" : ""}`}
           >
+            {/* Search box */}
             <div className="chatSearch">
               <i className="bx bx-search"></i>
               <input
                 type="text"
                 placeholder="Search users or chats"
-                aria-label="Search"
+                value={searchInput}
                 onFocus={() => setIsSearching(true)}
-                onChange={(e) => handleSearchUser(e.target.value)}
+                onChange={(e) => {
+                  setSearchInput(e.target.value);
+                  handleSearchUser(e.target.value);
+                }}
               />
               {isSearching && (
                 <i
                   className="bx bx-x"
-                  onClick={() => setIsSearching(false)}
+                  onClick={() => {
+                    setIsSearching(false);
+                    setSearchInput("");
+                    setSearchingUsers([]);
+                  }}
                 ></i>
               )}
             </div>
-            {/* {!users.length && (
-              <div className="emptyState">
-                <p>search and contact with users</p>
-              </div>
-            )} */}
-            {/* ---- if search input not on focus, and user has chats */}
 
+            {/* Tabs */}
+            <div className="chatTabs">
+              <div
+                className={`chatTab ${tab === "chats" ? "active" : ""}`}
+                onClick={() => {
+                  setTab("chats");
+                  setIsSearching(false);
+                  setMessageInput("");
+                  setSearchingUsers([]);
+                }}
+              >
+                <i className="bx bx-message-dots"></i> My Chats
+              </div>
+
+              <div
+                className={`chatTab ${tab === "all_users" ? "active" : ""}`}
+                onClick={() => {
+                  setTab("all_users");
+                  sendSignal("get_all_users", {});
+                  setIsSearching(false);
+                  setMessageInput("");
+                  setSearchingUsers([]);
+                }}
+              >
+                <i className="bx bx-group"></i> All users
+              </div>
+            </div>
+
+            {/* No chats */}
+            {hasChats === "nope" && (
+              <div className="emptyState">
+                <p>
+                  You have no chats :( <br /> Search users and start a chat.
+                </p>
+              </div>
+            )}
+
+            {/* Loading chats */}
+            {!users.length && hasChats === "" && <ChatListSkeleton />}
+
+            {/* Chats list */}
             <div className="chats">
-              {!isSearching && users.length ? (
-                users?.map((user, index) => (
+              {/* If searching → show searchingUsers */}
+              {isSearching ? (
+                searchingUsers.length ? (
+                  searchingUsers.map((user) => (
+                    <div
+                      key={user.id}
+                      className="chatItem"
+                      onClick={() => handleShowChatWindow(user)}
+                    >
+                      <div
+                        className="userImg"
+                        style={{ backgroundColor: "#6366f1" }}
+                      ></div>
+                      <div className="chatContent">
+                        <div className="userName">{user.name}</div>
+                        <div className="lastMessage">
+                          {user.last_message || ""}
+                        </div>
+                      </div>
+                      <div className="lastmessage_time">
+                        <p className="l_time">
+                          {user.last_message_time &&
+                            getCurrentTime(user.last_message_time)}
+                        </p>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="emptyState">No users found</p>
+                )
+              ) : tab === "chats" ? (
+                users.map((chat) => (
                   <div
+                    key={chat.chat_id}
                     className="chatItem"
-                    key={index}
-                    onClick={() => handleShowChatWindow(user)}
+                    onClick={() => handleShowChatWindow(chat)}
                   >
                     <div
                       className="userImg"
                       style={{ backgroundColor: "#6366f1" }}
                     ></div>
                     <div className="chatContent">
-                      <div className="userName">{user.name}</div>
-                      <div className="lastMessage">{user.last_message}</div>
+                      <div className="userName">{chat.name}</div>
+                      <div className="lastMessage">
+                        {chat.last_message || "No messages"}
+                      </div>
                     </div>
                     <div className="lastmessage_time">
                       <p className="l_time">
-                        {getCurrentTime(user.last_message_time)}
+                        {chat.last_message_time &&
+                          getCurrentTime(chat.last_message_time)}
                       </p>
-                      <p></p>
                     </div>
                   </div>
                 ))
-              ) : (
-                <ChatListSkeleton />
-              )}
-
-              {/* --- showing the searching lists */}
-
-              {isSearching &&
-                searchingUsers?.map((user) => (
+              ) : tab === "all_users" ? (
+                allUsers.map((user) => (
                   <div
-                    className="chatItem"
                     key={user.id}
+                    className="chatItem"
                     onClick={() => handleShowChatWindow(user)}
                   >
                     <div
@@ -260,22 +333,24 @@ const Dashboard = () => {
                     ></div>
                     <div className="chatContent">
                       <div className="userName">{user.name}</div>
+                      <div className="lastMessage">
+                        {user.last_message || "No messages"}
+                      </div>
                     </div>
                   </div>
-                ))}
+                ))
+              ) : null}
             </div>
           </div>
 
-          {/* 
-                    Chat Window Area
-                                        */}
-
+          {/* ---------------- Chat Window ---------------- */}
           {currentUser ? (
             <div
               className={`chatWindow ${
                 !showChatOnMobile ? "mobile-hidden" : ""
               }`}
             >
+              {/* Header */}
               <div className="chatHeader">
                 <div className="headerUserInfo">
                   {window.innerWidth < 768 && (
@@ -287,55 +362,44 @@ const Dashboard = () => {
                     </button>
                   )}
                   <div className="headerUserDetails">
-                    <div className="headerUserName">{currentUser?.name}</div>
+                    <div className="headerUserName">{currentUser.name}</div>
                     <div className="headerUserStatus">online</div>
                   </div>
                 </div>
-                <div className="headerActions">
-                  <button className="headerBtn" aria-label="More options">
-                    <i className="bx bx-dots-vertical-rounded"></i>
-                  </button>
-                </div>
               </div>
 
-              {/* 
-                   Messages Area
-                                  */}
-
+              {/* Messages */}
               <div className="messagesArea">
-                {/* {!messages.length && (
+                {hasMessages === "nope" && (
                   <div className="emptyState">
                     <p>
                       No messages here yet... <br /> Start the conversation!
                     </p>
                   </div>
+                )}
+                {/* {!messages.length && hasMessages === "" && (
+                  <ChatWindowSkeleton />
                 )} */}
-                {messages.length ? (
-                  messages.map((message) => (
-                    <div
-                      key={message.id}
-                      className={`message ${
-                        message.sender_id === userId ? "sent" : "received"
-                      }`}
-                    >
-                      <div className="messageContent">
-                        <div className="messageText">{message.text}</div>
-                        <div className="messageTime">
-                          {getCurrentTime(message.time)}
-                        </div>
+                {messages.map((m) => (
+                  <div
+                    key={m.id}
+                    className={`message ${
+                      m.sender_id === userId ? "sent" : "received"
+                    }`}
+                  >
+                    <div className="messageContent">
+                      <div className="messageText">{m.text}</div>
+                      <div className="messageTime">
+                        {getCurrentTime(m.time)}
                       </div>
                     </div>
-                  ))
-                ) : (
-                  <ChatWindowSkeleton />
-                )}
+                  </div>
+                ))}
+
                 <div ref={messagesEndRef} />
               </div>
 
-              {/* 
-                    Input Area
-                                  */}
-
+              {/* Input */}
               <div className="chatInputArea">
                 <button className="attachBtn" aria-label="Attach file">
                   <i className="bx bx-paperclip"></i>
@@ -362,11 +426,7 @@ const Dashboard = () => {
               </div>
             </div>
           ) : (
-            <div
-              className={`chatWindow ${
-                !showChatOnMobile ? "mobile-hidden" : ""
-              }`}
-            >
+            <div className="chatWindow">
               <div className="emptyState">
                 <h2>Select a chat to start messaging</h2>
               </div>

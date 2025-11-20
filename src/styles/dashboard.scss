@@ -323,6 +323,101 @@
         align-items: center;
         justify-content: center;
       }
+
+      // .chatTabs {
+      //   display: flex;
+      //   justify-content: space-around;
+      //   align-items: center;
+      //   margin: 0 16px 10px 16px;
+      //   background: var(--color-bg-plate);
+      //   border-radius: 12px;
+      //   padding: 6px;
+
+      //   .chatTab {
+      //     flex: 1;
+      //     text-align: center;
+      //     padding: 8px 0;
+      //     border-radius: 10px;
+      //     font-size: 14px;
+      //     font-weight: 600;
+      //     color: var(--color-text-muted);
+      //     cursor: pointer;
+      //     transition: 0.25s ease;
+      //     display: flex;
+      //     align-items: center;
+      //     justify-content: center;
+      //     gap: 6px;
+
+      //     i {
+      //       font-size: 16px;
+      //     }
+
+      //     &:hover {
+      //       background: rgba(99, 102, 241, 0.08);
+      //       color: var(--color-primary);
+      //     }
+      //   }
+
+      //   .active {
+      //     background: var(--color-primary);
+      //     color: white !important;
+      //     box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+      //   }
+      // }
+      .chatTabs {
+        display: flex;
+        justify-content: flex-start; // align to start
+        gap: 16px; // space between tabs
+        margin: 0 16px 10px 16px;
+        background: var(--color-bg-plate);
+        border-radius: 12px;
+        padding: 6px 0;
+
+        .chatTab {
+          display: flex;
+          align-items: center;
+          gap: 2px;
+          padding: 6px 0;
+          font-size: 14px;
+          font-weight: 600;
+          color: var(--color-text-muted);
+          cursor: pointer;
+          position: relative; // for underline
+          transition: color 0.2s ease;
+
+          i {
+            font-size: 16px;
+            margin-right: 4px;
+          }
+
+          &:hover {
+            color: var(--color-primary);
+          }
+
+          &::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--color-primary);
+            transition: width 0.25s ease;
+          }
+
+          &:hover::after {
+            width: 100%;
+          }
+        }
+
+        .active {
+          color: var(--color-primary);
+
+          &::after {
+            width: 100%; // always show underline for active tab
+          }
+        }
+      }
     }
 
     .chatWindow {
