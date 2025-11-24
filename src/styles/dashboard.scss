@@ -175,7 +175,8 @@
       border: 1px solid var(--card-border);
       padding: 16px;
       box-shadow: var(--card-shadow);
-      min-height: 560px;
+      height: 560px;
+      max-height: 560px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -193,6 +194,7 @@
       overflow: hidden;
       border-right: none;
       border-radius: 12px 0px 0px 12px;
+      min-height: 560px;
 
       .chatSearch {
         display: flex;
@@ -429,7 +431,6 @@
       overflow: hidden;
       width: 450px;
       min-height: 560px;
-      max-height: 560px;
 
       .chatHeader {
         width: 100%;
@@ -853,10 +854,9 @@
   .chatContainer {
     width: 100%;
     margin: 0;
-
+    
     .chatSection {
       width: 100%;
-      height: calc(100vh - 70px);
       display: flex;
       position: relative;
       overflow: hidden;
@@ -864,7 +864,7 @@
       /* LEFT SIDE — CHAT LIST */
       .chatList {
         width: 100%;
-        height: 100%;
+        min-height: calc(100vh - 70px);
         position: absolute;
         left: 0;
         top: 0;
@@ -877,17 +877,13 @@
       /* RIGHT SIDE — CHAT WINDOW */
       .chatWindow {
         width: 100%;
-        height: 100%;
+        min-height: calc(100vh - 70px);
 
         /* HEADER (top fixed) */
         .chatHeader {
           flex-shrink: 0;
           height: 60px;
           padding: 10px 12px;
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
           background: #fff;
           display: flex;
           align-items: center;
@@ -904,10 +900,6 @@
           flex-shrink: 0;
           height: 70px;
           padding: 10px;
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
           background: #fff;
           border-top: 1px solid #eee;
           z-index: 10;
@@ -919,13 +911,6 @@
 
         /* MESSAGES in the middle */
         .messagesArea {
-          position: absolute;
-          top: 60px; /* height of header */
-          bottom: 70px; /* height of input */
-          left: 0;
-          right: 0;
-          padding: 12px;
-          overflow-y: auto;
         }
       }
 

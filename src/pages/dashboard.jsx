@@ -6,6 +6,7 @@ import {
   ChatListSkeleton,
   ChatWindowSkeleton,
 } from "../components/LoadingSkeleton";
+import { toast } from "react-toastify";
 
 const Dashboard = () => {
   // --- State ---
@@ -37,6 +38,12 @@ const Dashboard = () => {
   const socketUrl = "wss://devconnector-backend-yy5b.onrender.com/ws/chat/";
   // const socketUrl = "ws://localhost:8000/ws/chat/";
 
+  // for sorting chats
+  const toDate = (t) => {
+    if (!t) return new Date(0); // 1970 → lowest priority
+    return new Date(t.replace(" ", "T"));
+  };
+
   // Redirect to login if no token
   useEffect(() => {
     if (!localStorage.getItem("token")) {
@@ -60,7 +67,13 @@ const Dashboard = () => {
       // server sends list of chats
       if (data.action === "user_chats") {
         !data.chats.length && setHasChats("nope");
-        setUsers(data.chats);
+        setUsers(
+          [...data.chats].sort(
+            (a, b) =>
+              (a.last_message_time ? toDate(b.last_message_time) : 0) -
+              (b.last_message_time ? toDate(a.last_message_time) : 0)
+          )
+        );
       }
 
       // when user opens chat → server sends messages
@@ -71,7 +84,29 @@ const Dashboard = () => {
 
       // receiving a live message
       if (data.type === "chat_message") {
-        setMessages((prev) => [...prev, data.message]);
+        const msg = data.message;
+        setTab("chats")
+        // Update messages
+        setMessages((prev) => [...prev, msg]);
+
+        // Update chat list
+        setUsers((prevChats) => {
+          const updated = prevChats.map((chat) =>
+            chat.chat_id === msg.chat_id
+              ? {
+                  ...chat,
+                  last_message: msg.text,
+                  last_message_time: msg.time,
+                }
+              : chat
+          );
+
+          return updated.sort(
+            (a, b) =>
+              toDate(b.last_message_time || 0) -
+              toDate(a.last_message_time || 0)
+          );
+        });
       }
 
       if (data.action === "all_users") {
@@ -90,7 +125,23 @@ const Dashboard = () => {
             : userItem;
         });
 
-        setAllUsers(mappedUsers);
+        setAllUsers(
+          [...mappedUsers].sort(
+            (a, b) =>
+              toDate(b?.last_message_time || 0) -
+              toDate(a?.last_message_time || 0)
+          )
+        );
+      }
+
+      if (data.type === "new_chat_created") {
+        setUsers((prev) =>
+          [...prev, data.chat].sort(
+            (a, b) =>
+              toDate(b.last_message_time || 0) -
+              toDate(a.last_message_time || 0)
+          )
+        );
       }
     };
 
@@ -99,9 +150,9 @@ const Dashboard = () => {
   }, []);
 
   // Auto-scroll to bottom when messages update
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  // useEffect(() => {
+  //   messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  // }, [messages]);
 
   //
   useEffect(() => {
@@ -124,6 +175,8 @@ const Dashboard = () => {
   // Send message
   const handleSendMessage = () => {
     if (!messageInput.trim()) return;
+
+    // console.log(messages);
 
     // If chat doesn't exist → create new chat
     if (!messages.length) {
@@ -154,6 +207,9 @@ const Dashboard = () => {
 
   // When user clicks a chat/user
   const handleShowChatWindow = (user) => {
+    if (user.id === userId)
+      return toast("It's you cmon😂", { type: "success" });
+
     if (window.innerWidth < 768) setShowChatOnMobile(true);
 
     if (user.chat_id) {
@@ -184,7 +240,12 @@ const Dashboard = () => {
           : item;
       });
 
-      setSearchingUsers(mapped);
+      setSearchingUsers(
+        [...mapped].sort(
+          (a, b) =>
+            toDate(b.last_message_time || 0) - toDate(a.last_message_time || 0)
+        )
+      );
     } catch {}
   };
 
@@ -252,7 +313,7 @@ const Dashboard = () => {
             </div>
 
             {/* No chats */}
-            {hasChats === "nope" && (
+            {hasChats === "nope" && tab === "chats" && !isSearching && (
               <div className="emptyState">
                 <p>
                   You have no chats :( <br /> Search users and start a chat.
@@ -333,9 +394,13 @@ const Dashboard = () => {
                     ></div>
                     <div className="chatContent">
                       <div className="userName">{user.name}</div>
-                      <div className="lastMessage">
-                        {user.last_message || "No messages"}
-                      </div>
+                      <div className="lastMessage">{user.last_message}</div>
+                    </div>
+                    <div className="lastmessage_time">
+                      <p className="l_time">
+                        {user.last_message_time &&
+                          getCurrentTime(user.last_message_time)}
+                      </p>
                     </div>
                   </div>
                 ))
@@ -358,7 +423,7 @@ const Dashboard = () => {
                       className="backBtn"
                       onClick={() => setShowChatOnMobile(false)}
                     >
-                      <i className="bx bx-chevron-left"></i>
+                      <i className="bx bx-left-arrow-alt"></i>
                     </button>
                   )}
                   <div className="headerUserDetails">
@@ -380,9 +445,9 @@ const Dashboard = () => {
                 {/* {!messages.length && hasMessages === "" && (
                   <ChatWindowSkeleton />
                 )} */}
-                {messages.map((m) => (
+                {messages.map((m, i) => (
                   <div
-                    key={m.id}
+                    key={i}
                     className={`message ${
                       m.sender_id === userId ? "sent" : "received"
                     }`}

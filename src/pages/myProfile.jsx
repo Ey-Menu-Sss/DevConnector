@@ -12,6 +12,7 @@ const MyProfile = () => {
   const [name, setName] = useState("");
   const [profile, setProfile] = useState({});
   const [use, setUse] = useState(false);
+  const [isNewUser, setIsNewUser] = useState(null);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -27,16 +28,17 @@ const MyProfile = () => {
     try {
       axios.defaults.headers.common["x-auth-token"] =
         localStorage.getItem("token");
-      const res = await axios.get("/profile/me");
+      const { data } = await axios.get("/profile/me");
+      data.user && localStorage.setItem("user", JSON.stringify(data.user));
 
-      res.data.user && localStorage.setItem("user", JSON.stringify(res.data.user))
+      data?.status ? setIsNewUser(false) : setIsNewUser(true);
 
-      setName(res.data?.user?.name);
-      setProfile(res.data);
-      dispatch(UserAllInfo(res.data));
+      setName(data?.user?.name);
+      setProfile(data);
+      dispatch(UserAllInfo(data));
       setUse(true);
     } catch (err) {
-      setUse(true); 
+      setUse(true);
     }
   };
 
@@ -86,153 +88,136 @@ const MyProfile = () => {
     <div>
       <Header />
 
-      {Object.keys(profile).length === 0 ? (
-        <div className="dashboardContainer">
-          {!use ? (
-            <DashboardSkeleton />
-          ) : (
-            <div>
-              <h2>
-                <i className="bx bxs-user"></i>Welcome new User!
-              </h2>
-              <p>You have not yet setup a profile. Please add some info.</p>
-              <Link to="/create-profile" className="btnPrimary">
-                Create Profile
-              </Link>
-            </div>
-          )}
-        </div>
-      ) : (
-        <div className="dashboardContainer">
-          <h2>
-            <i className="bx bxs-user"></i> Hello, {name}!
-          </h2>
+      <div className="dashboardContainer">
+        <h2>
+          <i className="bx bxs-user"></i> Hello, {name}!
+        </h2>
 
-          <div className="addOrEditSection">
-            <Link to="/edit-profile" className="link">
-              <div className="editProfile">
-                <i className="bx bxs-user-circle"></i>
-                <p>Edit Profile</p>
-              </div>
-            </Link>
+        <div className="addOrEditSection">
+          <Link to="/edit-profile" className="link">
+            <div className="editProfile">
+              <i className="bx bxs-user-circle"></i>
+              <p>{isNewUser ? "Create Profile" : "Edit Profile"}</p>
+            </div>
+          </Link>
+          {!isNewUser && (
             <Link to="/add-experience" className="link">
               <div className="addExperience">
                 <i className="bx bx-clipboard"></i>
                 <p>Add Experience</p>
               </div>
             </Link>
+          )}
+          {!isNewUser && (
             <Link to="/add-education" className="link">
               <div className="addEducation">
                 <i className="bx bxs-graduation"></i>
                 <p>Add Education</p>
               </div>
             </Link>
-          </div>
-
-          <div className="expCredentials">
-            <h2>Experience Credentials</h2>
-            <table>
-              <thead>
-                <tr>
-                  <th>Company</th>
-                  <th>Title</th>
-                  <th>Years</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {profile?.experience && profile.experience.length > 0 ? (
-                  profile.experience.map((item) => (
-                    <tr key={item._id}>
-                      <td>{item.company}</td>
-                      <td>{item.title}</td>
-                      <td>{item.from}</td>
-                      <td>
-                        <button
-                          className="btnDelete"
-                          onClick={() => deleteExp(item._id)}
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan="4"
-                      style={{
-                        textAlign: "center",
-                        color: "var(--color-text-muted)",
-                      }}
-                    >
-                      No experiences yet
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-
-          <div className="expCredentials">
-            <h2>Education Credentials</h2>
-            <table>
-              <thead>
-                <tr>
-                  <th>School</th>
-                  <th>Degree</th>
-                  <th>Years</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {profile?.education && profile.education.length > 0 ? (
-                  profile.education.map((item) => (
-                    <tr key={item._id}>
-                      <td>{item.school}</td>
-                      <td>{item.degree}</td>
-                      <td>{item.from}</td>
-                      <td>
-                        <button
-                          className="btnDelete"
-                          onClick={() => deleteEdu(item._id)}
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan="4"
-                      style={{
-                        textAlign: "center",
-                        color: "var(--color-text-muted)",
-                      }}
-                    >
-                      No educations yet
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-
-          <div className="accountActions">
-            <button
-              className="btn_logout"
-              onClick={logout}
-            >
-              <i className="bx bx-log-in"></i>
-              Logout
-            </button>
-            <button className="btn_delete" onClick={deleteAccount}>
-              Delete My Account
-            </button>
-          </div>
+          )}
         </div>
-      )}
+
+        <div className="expCredentials">
+          <h2>Experience Credentials</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Company</th>
+                <th>Title</th>
+                <th>Years</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {profile?.experience && profile.experience.length > 0 ? (
+                profile.experience.map((item) => (
+                  <tr key={item._id}>
+                    <td>{item.company}</td>
+                    <td>{item.title}</td>
+                    <td>{item.from}</td>
+                    <td>
+                      <button
+                        className="btnDelete"
+                        onClick={() => deleteExp(item._id)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan="4"
+                    style={{
+                      textAlign: "center",
+                      color: "var(--color-text-muted)",
+                    }}
+                  >
+                    No experiences yet
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="expCredentials">
+          <h2>Education Credentials</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>School</th>
+                <th>Degree</th>
+                <th>Years</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {profile?.education && profile.education.length > 0 ? (
+                profile.education.map((item) => (
+                  <tr key={item._id}>
+                    <td>{item.school}</td>
+                    <td>{item.degree}</td>
+                    <td>{item.from}</td>
+                    <td>
+                      <button
+                        className="btnDelete"
+                        onClick={() => deleteEdu(item._id)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan="4"
+                    style={{
+                      textAlign: "center",
+                      color: "var(--color-text-muted)",
+                    }}
+                  >
+                    No educations yet
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="accountActions">
+          <button className="btn_logout" onClick={logout}>
+            <i className="bx bx-log-in"></i>
+            Logout
+          </button>
+          <button className="btn_delete" onClick={deleteAccount}>
+            Delete My Account
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
