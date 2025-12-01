@@ -46,6 +46,9 @@ const registerHeader = () => {
           <Link to="/profiles" className="links" onClick={closeMenu}>
             Developers
           </Link>
+          <Link to="/chatbot" className="links" onClick={closeMenu}>
+            chatBot
+          </Link>
           <Link to="/register" className="links" onClick={closeMenu}>
             Register
           </Link>

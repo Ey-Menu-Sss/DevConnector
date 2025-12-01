@@ -35,8 +35,8 @@ const Dashboard = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const userId = user?._id;
 
-  const socketUrl = "wss://devconnector-backend-yy5b.onrender.com/ws/chat/";
-  // const socketUrl = "ws://localhost:8000/ws/chat/";
+  // const socketUrl = "wss://devconnector-backend-yy5b.onrender.com/ws/chat/";
+  const socketUrl = "ws://localhost:8000/ws/chat/";
 
   // for sorting chats
   const toDate = (t) => {
@@ -504,3 +504,22 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+
+
+
+
+
+
+function anything() {
+  return 
+}
+
+
+
+
+
+
+
+
+
