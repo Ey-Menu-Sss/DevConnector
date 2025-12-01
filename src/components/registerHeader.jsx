@@ -47,7 +47,7 @@ const registerHeader = () => {
             Developers
           </Link>
           <Link to="/chatbot" className="links" onClick={closeMenu}>
-            chatBot
+            AI ChatBot
           </Link>
           <Link to="/register" className="links" onClick={closeMenu}>
             Register

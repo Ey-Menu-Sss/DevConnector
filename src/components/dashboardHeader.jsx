@@ -61,9 +61,11 @@ const dashboardHeader = () => {
             Chat
           </Link>
           <Link to="/profiles" className="links" onClick={closeMenu}>
+            <i class="bx bx-code-alt"></i>
             Developers
           </Link>
           <Link to="/posts" className="links" onClick={closeMenu}>
+            <i class="bx bx-news"></i>
             Posts
           </Link>
           <Link to="/chatbot" className="links" onClick={closeMenu}>

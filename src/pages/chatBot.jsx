@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import RegisterHeader from "../components/registerHeader";
 import Header from "../components/dashboardHeader";
 import "../styles/chatBot.scss";
 
@@ -39,7 +40,7 @@ const ChatBot = () => {
 
   return (
     <div>
-      <Header />
+      {localStorage.getItem("token") ? <Header /> : <RegisterHeader />}
       <div className="chatbot_container">
         <div className="chatbot_header">
           <div className="chatbot_title_section">
